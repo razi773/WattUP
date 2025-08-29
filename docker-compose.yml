@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  django-app:
+    env_file:
+      - .env
+    build: .
+    container_name: django-app
+    ports:
+      - "8000:8000"
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass
+      MONGO_DB_NAME: energy_db
+      MONGO_PORT: 27017
+    depends_on:
+      - mongodb
+    restart: on-failure:5
+
+volumes:
+  mongo_data:

@@ -1,0 +1,575 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prédictions  </title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --glass-bg-strong: rgba(255, 255, 255, 0.35);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.37);
+      --shadow-medium: 0 15px 35px rgba(31, 38, 135, 0.2);
+      --shadow-heavy: 0 25px 50px rgba(31, 38, 135, 0.15);
+      --border-radius: 20px;
+      --border-radius-large: 30px;
+      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      color: #333;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+      animation: backgroundMove 20s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes backgroundMove {
+      0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        filter: hue-rotate(0deg);
+      }
+      25% { 
+        transform: scale(1.1) rotate(1deg);
+        filter: hue-rotate(90deg);
+      }
+      50% { 
+        transform: scale(1.05) rotate(-0.5deg);
+        filter: hue-rotate(180deg);
+      }
+      75% { 
+        transform: scale(1.15) rotate(0.8deg);
+        filter: hue-rotate(270deg);
+      }
+    }
+
+    /* Floating Particles */
+    .floating-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { 
+      width: 20px; height: 20px; top: 10%; left: 10%; 
+      animation-delay: 0s; animation-duration: 12s;
+    }
+    .particle:nth-child(2) { 
+      width: 30px; height: 30px; top: 20%; right: 15%; 
+      animation-delay: 2s; animation-duration: 18s;
+    }
+    .particle:nth-child(3) { 
+      width: 15px; height: 15px; bottom: 20%; left: 20%; 
+      animation-delay: 4s; animation-duration: 14s;
+    }
+    .particle:nth-child(4) { 
+      width: 25px; height: 25px; bottom: 30%; right: 25%; 
+      animation-delay: 6s; animation-duration: 16s;
+    }
+    .particle:nth-child(5) { 
+      width: 18px; height: 18px; top: 50%; left: 50%; 
+      animation-delay: 8s; animation-duration: 20s;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg); 
+        opacity: 0.3; 
+      }
+      25% { 
+        transform: translateY(-30px) translateX(20px) rotate(90deg); 
+        opacity: 0.7; 
+      }
+      50% { 
+        transform: translateY(-60px) translateX(-10px) rotate(180deg); 
+        opacity: 1; 
+      }
+      75% { 
+        transform: translateY(-30px) translateX(-30px) rotate(270deg); 
+        opacity: 0.5; 
+      }
+    }
+
+    /* Main Container */
+    .main-container {
+      min-height: 100vh;
+      padding: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Section */
+    .header-section {
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(20px);
+      border-radius: var(--border-radius-large);
+      box-shadow: var(--shadow-heavy);
+      padding: 50px;
+      margin-bottom: 40px;
+      text-align: center;
+      border: 2px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+      animation: slideInDown 1s ease-out;
+    }
+
+    .header-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+      transform: rotate(45deg);
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+      100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    }
+
+    .header-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #f0f0f0 50%, #fff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+      animation: titleGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      from { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
+      to { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6)); }
+    }
+
+    .header-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Prediction Control Card */
+    .prediction-card {
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(20px);
+      border-radius: var(--border-radius-large);
+      box-shadow: var(--shadow-heavy);
+      padding: 40px;
+      margin-bottom: 40px;
+      border: 2px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+      animation: slideInUp 1s ease-out 0.3s both;
+    }
+
+    .prediction-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: slideLight 3s ease-in-out infinite;
+    }
+
+    @keyframes slideLight {
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: -100%; }
+    }
+
+    /* Prediction Button */
+    .predict-btn {
+      background: var(--secondary-gradient);
+      border: none;
+      border-radius: 20px;
+      padding: 20px 50px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 2;
+    }
+
+    .predict-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: var(--transition);
+    }
+
+    .predict-btn:hover::before {
+      left: 100%;
+    }
+
+    .predict-btn:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(240, 147, 251, 0.6);
+      color: white;
+    }
+
+    .predict-btn i {
+      font-size: 1.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .predict-btn:hover i {
+      animation: spin 0.8s ease-in-out;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .predict-btn.loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .predict-btn.loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    /* Back Button */
+    .back-btn {
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 15px;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Status Message */
+    .status-message {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 15px;
+      font-weight: 500;
+      display: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .status-message.success {
+      background: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+      border: 2px solid rgba(40, 167, 69, 0.3);
+    }
+
+    .status-message.warning {
+      background: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+      border: 2px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .status-message.error {
+      background: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+      border: 2px solid rgba(220, 53, 69, 0.3);
+    }
+
+    /* Animations */
+    @keyframes slideInDown {
+      from { 
+        opacity: 0; 
+        transform: translateY(-100px) scale(0.8); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+
+    @keyframes slideInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(100px) scale(0.8); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 15px;
+      }
+
+      .header-section {
+        padding: 30px 20px;
+      }
+
+      .header-title {
+        font-size: 2.5rem;
+      }
+
+      .prediction-card {
+        padding: 25px 15px;
+      }
+
+      .predict-btn {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating Particles -->
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+
+    <!-- Header Section -->
+    <div class="header-section">
+      <h1 class="header-title">
+        <i class="fas fa-robot"></i>
+        Prédictions SFM technologies
+      </h1>
+      <p class="header-subtitle">
+         Prédictions Énergétique
+      </p>
+    </div>
+
+    <!-- Prediction Control Card -->
+    <div class="prediction-card">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <h3 style="color: white; margin-bottom: 20px; position: relative; z-index: 2;">
+            <i class="fas fa-brain mr-3"></i>
+            Lancer une Nouvelle Prédiction
+          </h3>
+
+
+
+          <div class="prediction-features mb-4" style="position: relative; z-index: 2;">
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div style="color: white; text-align: center;">
+                  <i class="fas fa-chart-line" style="font-size: 2rem; color: #38ef7d; margin-bottom: 10px;"></i>
+                  <h6>Analyse Avancée</h6>
+                  <small style="opacity: 0.8;">Algorithmes d'apprentissage automatique</small>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div style="color: white; text-align: center;">
+                  <i class="fas fa-clock" style="font-size: 2rem; color: #4facfe; margin-bottom: 10px;"></i>
+                  <h6>Prédictions 30 Jours</h6>
+                  <small style="opacity: 0.8;">Prévisions à court et moyen terme</small>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div style="color: white; text-align: center;">
+                  <i class="fas fa-target" style="font-size: 2rem; color: #f093fb; margin-bottom: 10px;"></i>
+                  <h6>Haute Précision</h6>
+                  <small style="opacity: 0.8;">Précision moyenne de 95%+</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button id="predict-btn" class="predict-btn" style="min-width:220px; font-size:1.3rem;">
+              <i class="fas fa-bolt"></i>
+              <span>Lancer la prédiction </span>
+            </button>
+          </div>
+
+          <div id="status-message" class="status-message">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="status-text">Prédictions générées avec succès!</span>
+          </div>
+
+          <div class="mt-4" style="position: relative; z-index: 2;">
+            <a href="/auth/dashboard/" class="back-btn">
+              <i class="fas fa-arrow-left"></i>
+              Retour au Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Section du graphique supprimée -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById("predict-btn").addEventListener("click", function() {
+      const button = this;
+      const statusDiv = document.getElementById("status-message");
+      const statusText = document.getElementById("status-text");
+
+      if (!confirm("🔄 Lancer une nouvelle prédiction XGBoost ?\n\nCette opération va :\n• Remplacer les anciennes prédictions par de nouvelles\n• Analyser les données historiques récentes\n• Générer 30 jours de prédictions\n• Mettre à jour le dashboard\n\nContinuer ?")) return;
+
+      button.classList.add("loading");
+      button.innerHTML = '<i class="fas fa-spinner"></i><span>Traitement en cours...</span>';
+      button.disabled = true;
+      statusDiv.style.display = "none";
+      statusDiv.className = "status-message";
+
+      fetch("/auth/predict-xgb/", {
+        method: "GET",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json"
+        },
+        credentials: 'same-origin'
+      })
+      .then(response => response.json())
+      .then(data => {
+        button.classList.remove("loading");
+        
+        if (data.status === 'success') {
+          button.innerHTML = '<i class="fas fa-check"></i><span>Prédiction Terminée</span>';
+          statusDiv.className = "status-message success";
+          statusText.innerHTML = `
+            <i class="fas fa-check-circle mr-2"></i>
+            ${data.message}<br>
+            <small class="mt-2 d-block">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              Période: ${data.period_start} au ${data.period_end}<br>
+              <i class="fas fa-chart-line mr-1"></i>
+              ${data.predictions_count} prédictions générées
+              ${data.replaced ? '<br><i class="fas fa-sync-alt mr-1"></i>Anciennes prédictions remplacées' : ''}
+            </small>
+          `;
+        } else {
+          button.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Erreur</span>';
+          statusDiv.className = "status-message error";
+          statusText.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i>Erreur: ${data.message}`;
+        }
+        
+        statusDiv.style.display = "block";
+        
+        // Redirection vers le dashboard après 3 secondes
+        if (data.status === 'success') {
+          setTimeout(() => {
+            window.location.href = "/auth/dashboard/";
+          }, 3000);
+        }
+      })
+      .catch(error => {
+        button.classList.remove("loading");
+        button.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Erreur</span>';
+        statusDiv.className = "status-message error";
+        statusText.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i>Erreur: ${error.message}`;
+        statusDiv.style.display = "block";
+        setTimeout(() => {
+          button.classList.remove("loading");
+          button.innerHTML = '<i class="fas fa-bolt"></i><span>Lancer la prédiction XGBoost</span>';
+          button.disabled = false;
+        }, 4000);
+      });
+    });
+  </script>
+</body>
+</html>

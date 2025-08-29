@@ -1,0 +1,71 @@
+﻿
+
+- Cause possible : Climatisation excessive pendant un pic de chaleur.
+- Recommandation : Ajuster la consigne de température à 25°C ; vérifier isolation thermique.
+
+- Cause possible : Équipements oubliés allumés (serveurs non critiques, éclairage, écrans).
+- Recommandation : Implémenter un système d’arrêt automatique ou d’alerting.
+
+- Cause possible : Maintenance technique avec équipements lourds.
+- Recommandation : Anticiper les pics dans le planning de consommation.
+
+- Cause possible : Capteur de courant défectueux ou coupure partielle.
+- Recommandation : Vérifier l’état des capteurs ; recalibrer si nécessaire.
+
+- Cause possible : Mauvais facteur de puissance dû à moteurs ou transformateurs non compensés.
+- Recommandation : Installer des batteries de condensateurs.
+
+- Cause possible : Machines restées allumées sans activité.
+- Recommandation : Automatiser l’extinction des postes de travail non critiques.
+
+- Cause possible : Problème d’automate ou de régulation.
+- Recommandation : Vérifier les séquences horaires programmées.
+
+- Cause possible : Capteur thermique déréglé ou stratégie de climatisation obsolète.
+- Recommandation : Revoir l'algorithme de régulation climatique.
+
+- Cause possible : Nouvel équipement énergivore non déclaré.
+- Recommandation : Ajouter l’équipement dans la supervision et adapter les seuils.
+
+- Cause possible : Multiprises utilisées pour des charges interdites (chauffage d’appoint…).
+- Recommandation : Auditer les postes individuellement ; sécuriser les prises.
+
+- Cause possible : Tests hors production ou intrusion.
+- Recommandation : Coupler les données énergétiques avec les logs de présence.
+
+- Cause possible : Instrumentation HS depuis plusieurs jours.
+- Recommandation : Mettre en place une alerte sur les valeurs nulles prolongées.
+
+- Cause possible : Instabilité réseau ou surcharge.
+- Recommandation : Contacter le fournisseur d’énergie pour diagnostic.
+
+- Cause possible : Rafraîchissement inadapté ou surcharge des groupes de froid.
+- Recommandation : Activer mode "économie" ou régulation dynamique.
+
+- Cause possible : Erreur de saisie manuelle ou erreur comptage.
+- Recommandation : Auditer les données historiques et normaliser.
+
+- Cause possible : Système de chauffage ou ventilation resté actif à plein régime.
+- Recommandation : Réaligner usage énergétique et activité réelle.
+
+... (ajouter d'autres si besoin) ...
+
+🔺 Anomalie : Température ambiante excessive dans la salle serveur
+Cause probable : Défaillance du système de climatisation ou surcharge thermique
+Recommandation : Vérifier les unités de climatisation, ajouter des capteurs thermiques, ajuster le seuil d'alarme
+
+🔺 Anomalie : Fluctuation anormale de tension électrique
+Cause probable : Instabilité du réseau ou équipements industriels à forte charge
+Recommandation : Installer un onduleur/UPS, analyser la qualité du réseau, consulter le fournisseur d'électricité
+
+🔺 Anomalie : Surtension pendant les heures creuses
+Cause probable : Réglage inapproprié des équipements ou absence de régulation intelligente
+Recommandation : Mettre en place un système de régulation automatique et revoir la planification énergétique
+
+🔺 Anomalie : Consommation constante pendant la nuit
+Cause probable : Équipements laissés allumés inutilement (PC, écrans, éclairage)
+Recommandation : Automatiser l'extinction nocturne, sensibiliser les employés, installer des détecteurs de présence
+
+🔺 Anomalie : Dérive lente de la consommation sur plusieurs semaines
+Cause probable : Encrassement progressif des systèmes HVAC ou dégradation des équipements
+Recommandation : Mettre en place un suivi hebdomadaire, programmer une maintenance préventive

@@ -1,0 +1,774 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Compte Activé - FaceAuth AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Votre compte FaceAuth a été activé avec succès">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AdminLTE + Bootstrap -->
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/dist/css/adminlte.min.css' %}">
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <style>
+    :root {
+      --primary-color: #667eea;
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-color: #f093fb;
+      --success-color: #4facfe;
+      --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --danger-color: #ff6b6b;
+      --warning-color: #feca57;
+      --info-color: #48cae4;
+      --dark-color: #2c3e50;
+      --light-color: #f8f9fa;
+      --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+      --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.2);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--success-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated background elements */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("{% static 'images/bg-login.png' %}") no-repeat center center;
+      background-size: cover;
+      opacity: 0.05;
+      z-index: -1;
+    }
+
+    .celebration-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      animation: celebrate 3s ease-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes celebrate {
+      0% {
+        opacity: 1;
+        transform: translateY(100vh) scale(0);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(50vh) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-10vh) scale(0);
+      }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--primary-color);
+      animation: confetti-fall 4s linear infinite;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .success-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .success-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-heavy);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+      animation: successEntry 1s ease-out;
+      text-align: center;
+    }
+
+    @keyframes successEntry {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(50px);
+      }
+      50% {
+        transform: scale(1.05) translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .card-header {
+      background: var(--success-gradient);
+      color: white;
+      padding: 50px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      animation: successBounce 1.5s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes successBounce {
+      0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .brand-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+      animation: slideInUp 0.8s ease-out 0.3s both;
+    }
+
+    .brand-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+      animation: slideInUp 0.8s ease-out 0.5s both;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-body {
+      padding: 50px 40px;
+    }
+
+    .welcome-section {
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease-out 0.7s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .welcome-message {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .username-display {
+      background: var(--success-gradient);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: inline-block;
+      margin: 15px 0;
+      box-shadow: var(--shadow-medium);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: var(--shadow-medium);
+      }
+      to {
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      }
+    }
+
+    .success-details {
+      background: rgba(79, 172, 254, 0.1);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin: 30px 0;
+      animation: fadeInUp 0.8s ease-out 0.9s both;
+    }
+
+    .success-details h5 {
+      color: var(--success-color);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .success-details ul {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .success-details li {
+      padding: 8px 0;
+      color: #666;
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .success-details li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--success-color);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .action-buttons {
+      margin-top: 40px;
+      animation: fadeInUp 0.8s ease-out 1.1s both;
+    }
+
+    .btn {
+      padding: 15px 40px;
+      border-radius: 25px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      margin: 10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-heavy);
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-success {
+      background: var(--success-gradient);
+      color: white;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-heavy);
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-outline-primary {
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+      text-decoration: none;
+    }
+
+    .features-preview {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #eee;
+      animation: fadeInUp 0.8s ease-out 1.3s both;
+    }
+
+    .features-preview h6 {
+      color: var(--dark-color);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .feature-icons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .feature-icon {
+      text-align: center;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      background: rgba(102, 126, 234, 0.1);
+      transition: var(--transition);
+      min-width: 100px;
+    }
+
+    .feature-icon:hover {
+      transform: translateY(-5px);
+      background: rgba(102, 126, 234, 0.2);
+    }
+
+    .feature-icon i {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .feature-icon span {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 0.9rem;
+      animation: fadeInUp 0.8s ease-out 1.5s both;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .success-container {
+        padding: 10px;
+      }
+
+      .card-body {
+        padding: 40px 20px;
+      }
+
+      .brand-title {
+        font-size: 2rem;
+      }
+
+      .username-display {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+      }
+
+      .feature-icons {
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        margin: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-title {
+        font-size: 1.8rem;
+      }
+
+      .welcome-message {
+        font-size: 1.3rem;
+      }
+
+      .feature-icons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .feature-icon {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Celebration particles -->
+  <div class="celebration-particles" id="particles"></div>
+
+  <div class="success-container animate__animated animate__fadeIn">
+    <div class="success-card">
+      <!-- Header -->
+      <div class="card-header">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h1 class="brand-title">Félicitations !</h1>
+        <p class="brand-subtitle">Votre compte a été activé avec succès</p>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+          <h3 class="welcome-message">Bienvenue dans FaceAuth AI</h3>
+          <div class="username-display">
+            <i class="fas fa-user-circle"></i>
+            {{ username|default:"Utilisateur" }}
+          </div>
+          <p>Votre compte est maintenant actif et prêt à être utilisé !</p>
+        </div>
+
+        <!-- Success Details -->
+        <div class="success-details">
+          <h5><i class="fas fa-shield-alt"></i> Votre compte est sécurisé</h5>
+          <ul>
+            <li>Email vérifié et confirmé</li>
+            <li>Reconnaissance faciale configurée</li>
+            <li>Accès complet aux fonctionnalités</li>
+            <li>Données protégées et chiffrées</li>
+          </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="{% url 'login' %}" class="btn btn-success">
+            <i class="fas fa-sign-in-alt"></i>
+            Se connecter maintenant
+          </a>
+          <a href="{% url 'face_register' %}" class="btn btn-outline-primary">
+            <i class="fas fa-user-plus"></i>
+            Créer un autre compte
+          </a>
+        </div>
+
+        <!-- Features Preview -->
+        <div class="features-preview">
+          <h6>Découvrez les fonctionnalités disponibles :</h6>
+          <div class="feature-icons">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+              <span>Analyse énergétique</span>
+            </div>
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+              <span>IA prédictive</span>
+            </div>
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+              <span>Sécurité avancée</span>
+            </div>
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+              <span>Interface moderne</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="footer-note">
+          <p>
+            <i class="fas fa-info-circle"></i>
+            Vous pouvez maintenant vous connecter en utilisant votre email/mot de passe ou la reconnaissance faciale.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="{% static 'AdminLTE-3.2.0/plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'AdminLTE-3.2.0/dist/js/adminlte.min.js' %}"></script>
+
+  <script>
+    // Create celebration particles
+    function createCelebrationParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const colors = ['#667eea', '#764ba2', '#4facfe', '#00f2fe', '#f093fb'];
+
+      // Create confetti
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 2 + 's';
+          confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+
+          particlesContainer.appendChild(confetti);
+
+          // Remove after animation
+          setTimeout(() => {
+            confetti.remove();
+          }, 5000);
+        }, i * 100);
+      }
+
+      // Create floating particles
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.animationDelay = Math.random() * 3 + 's';
+
+          particlesContainer.appendChild(particle);
+
+          // Remove after animation
+          setTimeout(() => {
+            particle.remove();
+          }, 4000);
+        }, i * 150);
+      }
+    }
+
+    // Add hover effects to feature icons
+    function addFeatureIconEffects() {
+      const featureIcons = document.querySelectorAll('.feature-icon');
+
+      featureIcons.forEach(icon => {
+        icon.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px) scale(1.05)';
+          this.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+        });
+
+        icon.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+          this.style.boxShadow = 'none';
+        });
+      });
+    }
+
+    // Add button click effects
+    function addButtonEffects() {
+      const buttons = document.querySelectorAll('.btn');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          // Create ripple effect
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.style.position = 'absolute';
+          ripple.style.borderRadius = '50%';
+          ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+          ripple.style.transform = 'scale(0)';
+          ripple.style.animation = 'ripple 0.6s linear';
+          ripple.style.pointerEvents = 'none';
+
+          this.appendChild(ripple);
+
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      });
+    }
+
+    // Add ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Auto-redirect after delay
+    function autoRedirect() {
+      let countdown = 10;
+      const redirectBtn = document.querySelector('.btn-success');
+      const originalText = redirectBtn.innerHTML;
+
+      const interval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          redirectBtn.innerHTML = `<i class="fas fa-clock"></i> Redirection automatique dans ${countdown}s`;
+        } else {
+          clearInterval(interval);
+          window.location.href = redirectBtn.href;
+        }
+      }, 1000);
+
+      // Cancel auto-redirect if user interacts
+      document.addEventListener('click', () => {
+        clearInterval(interval);
+        redirectBtn.innerHTML = originalText;
+      });
+
+      document.addEventListener('keydown', () => {
+        clearInterval(interval);
+        redirectBtn.innerHTML = originalText;
+      });
+    }
+
+    // Initialize everything when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add smooth scrolling
+      document.documentElement.style.scrollBehavior = 'smooth';
+
+      // Create celebration effects
+      setTimeout(createCelebrationParticles, 500);
+
+      // Add interactive effects
+      addFeatureIconEffects();
+      addButtonEffects();
+
+      // Start auto-redirect countdown
+      setTimeout(autoRedirect, 3000);
+
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          document.querySelector('.btn-success').click();
+        }
+      });
+    });
+
+    // Add success sound effect (optional)
+    function playSuccessSound() {
+      // Create audio context for success sound
+      if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+        const audioContext = new (AudioContext || webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+        oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      }
+    }
+
+    // Play success sound on load (with user interaction)
+    document.addEventListener('click', playSuccessSound, { once: true });
+  </script>
+
+</body>
+</html>

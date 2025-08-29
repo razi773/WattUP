@@ -1,0 +1,24 @@
+INFO 2025-06-26 14:52:30,143 mongodb_views 12420 19160 MongoDB connection established successfully
+INFO 2025-06-26 15:09:10,233 mongodb_views 19424 8904 MongoDB connection established successfully
+INFO 2025-06-26 15:10:22,687 mongodb_views 21212 4848 MongoDB connection established successfully
+INFO 2025-06-26 15:11:34,321 mongodb_views 692 3104 MongoDB connection established successfully
+INFO 2025-06-26 15:13:35,984 mongodb_views 18812 14400 MongoDB connection established successfully
+ERROR 2025-06-26 15:13:35,985 mongodb_views 18812 14400 Error getting MongoDB stats: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None
+INFO 2025-06-26 15:15:09,852 mongodb_views 17388 18112 MongoDB connection established successfully
+INFO 2025-06-26 15:15:30,697 mongodb_views 6124 18972 MongoDB connection established successfully
+INFO 2025-06-26 15:20:09,818 mongodb_views 11764 14416 MongoDB connection established successfully
+INFO 2025-06-26 15:20:09,834 mongodb_views 20952 14524 MongoDB connection established successfully
+INFO 2025-06-26 15:21:47,397 mongodb_views 9940 4380 MongoDB connection established successfully
+INFO 2025-06-26 15:22:59,234 mongodb_views 21080 7784 MongoDB connection established successfully
+INFO 2025-06-26 15:22:59,712 mongodb_views 9012 14640 MongoDB connection established successfully
+INFO 2025-06-26 15:24:08,027 mongodb_views 12712 15292 MongoDB connection established successfully
+INFO 2025-06-26 15:25:23,285 mongodb_views 4684 20432 MongoDB connection established successfully
+INFO 2025-06-26 15:29:18,512 mongodb_views 17860 14408 MongoDB connection established successfully
+INFO 2025-06-29 15:39:42,660 mongodb_views 10316 11060 MongoDB connection established successfully
+INFO 2025-06-29 15:52:02,177 mongodb_views 14932 13400 MongoDB connection established successfully
+INFO 2025-06-29 15:52:38,330 mongodb_views 11252 10672 MongoDB connection established successfully
+INFO 2025-06-29 15:53:06,443 mongodb_views 14112 13316 MongoDB connection established successfully
+INFO 2025-06-29 16:00:21,220 mongodb_views 19184 1956 MongoDB connection established successfully
+INFO 2025-06-29 16:01:40,574 mongodb_views 11396 20604 MongoDB connection established successfully
+INFO 2025-06-29 16:02:21,231 mongodb_views 22480 18200 MongoDB connection established successfully
+INFO 2025-06-29 16:03:01,900 mongodb_views 7736 19668 MongoDB connection established successfully

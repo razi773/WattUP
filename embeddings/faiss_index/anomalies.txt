@@ -1,0 +1,125 @@
+# Base de connaissances : Anomalies énergétiques en entreprise
+
+## Type : Surconsommation inhabituelle
+- Cause possible : Climatisation excessive pendant un pic de chaleur.
+- Recommandation : Ajuster la consigne de température à 25°C ; vérifier isolation thermique.
+
+## Type : Consommation élevée pendant la nuit
+- Cause possible : Équipements oubliés allumés (serveurs non critiques, éclairage, écrans).
+- Recommandation : Implémenter un système d’arrêt automatique ou d’alerting.
+
+## Type : Pic soudain de consommation un jour spécifique
+- Cause possible : Maintenance technique avec équipements lourds.
+- Recommandation : Anticiper les pics dans le planning de consommation.
+
+## Type : Consommation basse anormale
+- Cause possible : Capteur de courant défectueux ou coupure partielle.
+- Recommandation : Vérifier l’état des capteurs ; recalibrer si nécessaire.
+
+## Type : Énergie réactive excessive
+- Cause possible : Mauvais facteur de puissance dû à moteurs ou transformateurs non compensés.
+- Recommandation : Installer des batteries de condensateurs.
+
+## Type : Surconsommation en week-end
+- Cause possible : Machines restées allumées sans activité.
+- Recommandation : Automatiser l’extinction des postes de travail non critiques.
+
+## Type : Variation cyclique incohérente
+- Cause possible : Problème d’automate ou de régulation.
+- Recommandation : Vérifier les séquences horaires programmées.
+
+## Type : Consommation non corrélée à la température extérieure
+- Cause possible : Capteur thermique déréglé ou stratégie de climatisation obsolète.
+- Recommandation : Revoir l'algorithme de régulation climatique.
+
+## Type : Saut de consommation après installation
+- Cause possible : Nouvel équipement énergivore non déclaré.
+- Recommandation : Ajouter l’équipement dans la supervision et adapter les seuils.
+
+## Type : Surconsommation inexpliquée sur une seule prise
+- Cause possible : Multiprises utilisées pour des charges interdites (chauffage d’appoint…).
+- Recommandation : Auditer les postes individuellement ; sécuriser les prises.
+
+## Type : Anomalie détectée en période creuse
+- Cause possible : Tests hors production ou intrusion.
+- Recommandation : Coupler les données énergétiques avec les logs de présence.
+
+## Type : Sous-consommation continue
+- Cause possible : Instrumentation HS depuis plusieurs jours.
+- Recommandation : Mettre en place une alerte sur les valeurs nulles prolongées.
+
+## Type : Surtension ou chute de tension détectée
+- Cause possible : Instabilité réseau ou surcharge.
+- Recommandation : Contacter le fournisseur d’énergie pour diagnostic.
+
+## Type : Comportement atypique lors de canicule
+- Cause possible : Rafraîchissement inadapté ou surcharge des groupes de froid.
+- Recommandation : Activer mode "économie" ou régulation dynamique.
+
+## Type : Écart inhabituel par rapport à la moyenne mensuelle
+- Cause possible : Erreur de saisie manuelle ou erreur comptage.
+- Recommandation : Auditer les données historiques et normaliser.
+
+## Type : Consommation en hausse malgré baisse d'activité
+- Cause possible : Système de chauffage ou ventilation resté actif à plein régime.
+- Recommandation : Réaligner usage énergétique et activité réelle.
+
+
+🔺 Anomalie : Température ambiante excessive dans la salle serveur
+Cause probable : Défaillance du système de climatisation ou surcharge thermique
+Recommandation : Vérifier les unités de climatisation, ajouter des capteurs thermiques, ajuster le seuil d'alarme
+
+🔺 Anomalie : Fluctuation anormale de tension électrique
+Cause probable : Instabilité du réseau ou équipements industriels à forte charge
+Recommandation : Installer un onduleur/UPS, analyser la qualité du réseau, consulter le fournisseur d'électricité
+
+🔺 Anomalie : Surtension pendant les heures creuses
+Cause probable : Réglage inapproprié des équipements ou absence de régulation intelligente
+Recommandation : Mettre en place un système de régulation automatique et revoir la planification énergétique
+
+🔺 Anomalie : Consommation constante pendant la nuit
+Cause probable : Équipements laissés allumés inutilement (PC, écrans, éclairage)
+Recommandation : Automatiser l'extinction nocturne, sensibiliser les employés, installer des détecteurs de présence
+
+🔺 Anomalie : Dérive lente de la consommation sur plusieurs semaines
+Cause probable : Encrassement progressif des systèmes HVAC ou dégradation des équipements
+Recommandation : Mettre en place un suivi hebdomadaire, programmer une maintenance préventive
+## Type : Usage anormal pendant les congés
+- Cause possible : Programmation oubliée ou présence non planifiée.
+- Recommandation : Mettre en place des scénarios d’inactivité pendant les périodes de fermeture.
+
+## Type : Chaleur excessive dans les zones non climatisées
+- Cause possible : Perte d’efficacité des isolations ou propagation thermique.
+- Recommandation : Réaliser un audit thermique et ajouter des barrières isolantes.
+
+## Type : Perte d’énergie due à des compresseurs inefficaces
+- Cause possible : Compresseurs anciens ou mal entretenus.
+- Recommandation : Planifier un remplacement ou effectuer une maintenance avancée.
+
+## Type : Fluctuations inhabituelles après mise à jour système
+- Cause possible : Bug logiciel ou nouvelle configuration énergétique instable.
+- Recommandation : Vérifier les logs systèmes et restaurer les configurations précédentes si nécessaire.
+
+## Type : Consommation d’eau chaude industrielle trop élevée
+- Cause possible : Fuite ou régulation de température défectueuse.
+- Recommandation : Inspecter le réseau d’eau chaude et ajuster la consigne de température.
+
+## Type : Appels de puissance récurrents la nuit
+- Cause possible : Démarrages automatiques mal planifiés.
+- Recommandation : Synchroniser les démarrages avec les heures creuses réelles.
+
+## Type : Consommation réactive nocturne élevée
+- Cause possible : Compensation statique surdimensionnée.
+- Recommandation : Réadapter les équipements de compensation selon les profils de charge.
+
+## Type : Perte d’efficacité d’un groupe de froid
+- Cause possible : Manque d’entretien ou fuite de fluide frigorigène.
+- Recommandation : Réaliser une inspection technique et ajuster les charges.
+
+## Type : Augmentation progressive des consommations d’air comprimé
+- Cause possible : Fuite sur le réseau ou consommation masquée.
+- Recommandation : Contrôle par ultrasons, pose de compteurs intermédiaires.
+
+## Type : Baisse brutale de la consommation sans explication
+- Cause possible : Erreur de mesure ou interruption de service non déclarée.
+- Recommandation : Vérifier les journaux d’activité et l’état des capteurs.

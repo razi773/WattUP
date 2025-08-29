@@ -1,0 +1,39 @@
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="avatarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8a5fb8;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="75" cy="75" r="75" fill="url(#avatarGradient)" filter="url(#glow)"/>
+  
+  <!-- User Icon -->
+  <g transform="translate(75, 75)">
+    <!-- Head -->
+    <circle cx="0" cy="-15" r="20" fill="rgba(255,255,255,0.9)"/>
+    
+    <!-- Body -->
+    <path d="M -30 25 Q -30 5 -20 5 L 20 5 Q 30 5 30 25 L 30 40 L -30 40 Z" fill="rgba(255,255,255,0.9)"/>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="30" cy="30" r="3" fill="rgba(255,255,255,0.3)">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="120" cy="40" r="2" fill="rgba(255,255,255,0.4)">
+    <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="25" cy="120" r="2.5" fill="rgba(255,255,255,0.3)">
+    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

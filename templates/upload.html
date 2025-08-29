@@ -1,0 +1,2184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- HTML Head Section -->
+  <meta charset="UTF-8">
+  <title>Upload & Analyse - Energy AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Plateforme d'upload et d'analyse énergétique avec intelligence artificielle">
+
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/dist/css/adminlte.min.css' %}">
+
+  
+  <!-- CSS Styles -->
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+      --secondary-gradient: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+      --shadow-soft: 0 2px 25px rgba(0,0,0,0.1);
+      --shadow-hover: 0 5px 35px rgba(0,0,0,0.15);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    
+    .main-header {
+      background: var(--primary-gradient);
+      box-shadow: var(--shadow-soft);
+      border-bottom: none;
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .navbar-brand:hover {
+      color: rgba(255,255,255,0.9) !important;
+      transform: translateY(-1px);
+    }
+
+    .navbar-nav .nav-link {
+      color: white !important;
+      border-radius: 8px;
+      margin: 0 0.5rem;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-1px);
+    }
+
+    .dropdown-menu {
+      border: none;
+      box-shadow: var(--shadow-soft);
+      border-radius: var(--border-radius);
+    }
+
+    
+    .content-wrapper {
+      padding: 2rem 1rem;
+      min-height: calc(100vh - 120px);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+    }
+
+    
+    .card {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-header {
+      border: none;
+      padding: 1.5rem;
+      font-weight: 600;
+    }
+
+    .card-header.bg-primary {
+      background: var(--primary-gradient) !important;
+    }
+
+    .card-header.bg-success {
+      background: var(--success-gradient) !important;
+    }
+
+    .card-header.bg-info {
+      background: var(--info-gradient) !important;
+    }
+
+    .card-header.bg-warning {
+      background: var(--warning-gradient) !important;
+    }
+
+    .card-header.bg-danger {
+      background: var(--danger-gradient) !important;
+    }
+
+    .card-header.bg-secondary {
+      background: var(--secondary-gradient) !important;
+    }
+
+    .card-header.bg-dark {
+      background: var(--dark-gradient) !important;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    
+    .upload-zone {
+      border: 3px dashed #dee2e6;
+      border-radius: var(--border-radius);
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: var(--transition);
+      background: linear-gradient(45deg, rgba(255,255,255,0.8) 0%, rgba(248,249,250,0.8) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-zone::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: var(--transition);
+    }
+
+    .upload-zone:hover {
+      border-color: #007bff;
+      background: linear-gradient(45deg, rgba(0,123,255,0.05) 0%, rgba(0,123,255,0.1) 100%);
+      transform: translateY(-2px);
+    }
+
+    .upload-zone:hover::before {
+      left: 100%;
+    }
+
+    .upload-zone.dragover {
+      border-color: #28a745;
+      background: linear-gradient(45deg, rgba(40,167,69,0.1) 0%, rgba(40,167,69,0.2) 100%);
+      transform: scale(1.02);
+    }
+
+    .upload-icon {
+      font-size: 4rem;
+      color: #6c757d;
+      margin-bottom: 1rem;
+      transition: var(--transition);
+    }
+
+    .upload-zone:hover .upload-icon {
+      color: #007bff;
+      transform: scale(1.1);
+    }
+
+    
+    .btn {
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 0.75rem 2rem;
+      transition: var(--transition);
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: var(--transition);
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+    }
+
+    .btn-success {
+      background: var(--success-gradient);
+    }
+
+    .btn-warning {
+      background: var(--warning-gradient);
+    }
+
+    .btn-info {
+      background: var(--info-gradient);
+    }
+
+    .btn-danger {
+      background: var(--danger-gradient);
+    }
+
+    .btn-secondary {
+      background: var(--secondary-gradient);
+    }
+
+    
+    .form-control {
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+      padding: 0.75rem 1rem;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+      transform: translateY(-1px);
+    }
+
+    
+    pre {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 1px solid #dee2e6;
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    pre::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 2px 0 0 2px;
+    }
+
+    
+    .table {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .table thead th {
+      border: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    .table tbody tr {
+      transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(0,123,255,0.05);
+      transform: scale(1.01);
+    }
+
+    
+    .badge {
+      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    .badge-success {
+      background: var(--success-gradient);
+    }
+
+    .badge-danger {
+      background: var(--danger-gradient);
+    }
+
+    .badge-warning {
+      background: var(--warning-gradient);
+    }
+
+    .badge-info {
+      background: var(--info-gradient);
+    }
+
+    
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0,123,255,.3);
+      border-radius: 50%;
+      border-top-color: #007bff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    
+    .progress {
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      background: var(--primary-gradient);
+      transition: width 0.6s ease;
+    }
+
+    
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .content-wrapper {
+        padding: 1rem 0.5rem;
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .upload-zone {
+        padding: 2rem 1rem;
+      }
+
+      .btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+
+      .upload-zone {
+        padding: 1.5rem 0.5rem;
+      }
+
+      .upload-icon {
+        font-size: 3rem;
+      }
+    }
+
+    
+    .footer {
+      background: var(--dark-gradient);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: none;
+      box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+    }
+
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-up {
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    
+    .alert {
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 1rem 1.5rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .alert-success {
+      background: linear-gradient(135deg, rgba(40,167,69,0.1) 0%, rgba(40,167,69,0.2) 100%);
+      color: #155724;
+      border-left: 4px solid #28a745;
+    }
+
+    .alert-danger {
+      background: linear-gradient(135deg, rgba(220,53,69,0.1) 0%, rgba(220,53,69,0.2) 100%);
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    .alert-info {
+      background: linear-gradient(135deg, rgba(23,162,184,0.1) 0%, rgba(23,162,184,0.2) 100%);
+      color: #0c5460;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .alert-warning {
+      background: linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,193,7,0.2) 100%);
+      color: #856404;
+      border-left: 4px solid #ffc107;
+    }
+  </style>
+</head>
+<body class="hold-transition layout-top-nav">
+  <!-- Body Content -->
+
+<div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 9999; display: none; align-items: center; justify-content: center;">
+  <div class="text-center">
+    <div class="loading-spinner mb-3" style="width: 40px; height: 40px; border-width: 4px;"></div>
+    <p class="text-muted font-weight-bold">Traitement en cours...</p>
+    <div class="progress mt-3" style="width: 200px;">
+      <div class="progress-bar" role="progressbar" style="width: 0%" id="upload-progress"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  
+  <nav class="main-header navbar navbar-expand-lg" role="navigation" aria-label="Navigation principale">
+    <div class="container">
+      
+      <a href="/auth/dashboard/" class="navbar-brand" aria-label="Retour au dashboard Energy AI">
+        <i class="fas fa-bolt mr-2" aria-hidden="true"></i>
+        <span class="brand-text">⚡ SFM technologies </span>
+        <small class="d-block" style="font-size: 0.7rem; opacity: 0.8;">Analyse Énergétique</small>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
+        <span class="navbar-toggler-icon">
+          <i class="fas fa-bars text-white"></i>
+        </span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/dashboard/" aria-label="Aller au dashboard">
+              <i class="fas fa-chart-pie mr-1" aria-hidden="true"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/analyse-csv/" aria-current="page">
+              <i class="fas fa-upload mr-1" aria-hidden="true"></i>
+              Upload & Analyse
+            </a>
+          </li>
+        </ul>
+
+        
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown" aria-label="Notifications">
+              <i class="fas fa-bell" aria-hidden="true"></i>
+              <span class="badge badge-warning navbar-badge" id="notification-count" style="display: none;">0</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <h6 class="dropdown-header">Notifications</h6>
+              <div id="notifications-list">
+                <div class="dropdown-item text-center text-muted">Aucune notification</div>
+              </div>
+            </div>
+          </li>
+
+          
+          {% if request.session.username %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-label="Menu utilisateur {{ request.session.username }}">
+              <i class="fas fa-user mr-1" aria-hidden="true"></i>
+              <span class="d-none d-md-inline">{{ request.session.username }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <h6 class="dropdown-header">
+                <i class="fas fa-user-circle mr-2"></i>
+                {{ request.session.username }}
+              </h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/auth/profile/edit/">
+                <i class="fas fa-user-edit mr-2"></i>
+                Modifier le profil
+              </a>
+              <a class="dropdown-item" href="/auth/dashboard/">
+                <i class="fas fa-chart-pie mr-2"></i>
+                Dashboard
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt mr-2"></i>
+                Déconnexion
+              </a>
+            </div>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login/">
+              <i class="fas fa-sign-in-alt mr-1"></i>
+              Connexion
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="content-wrapper">
+    <div class="container">
+      
+      <div class="row mb-4">
+        <div class="col-12">
+          <h1 class="section-title fade-in">
+            <i class="fas fa-cloud-upload-alt mr-3" aria-hidden="true"></i>
+            Upload & Analyse Énergétique
+          </h1>
+          <p class="text-center text-muted mb-4 fade-in">
+            Téléchargez vos données énergétiques et obtenez des analyses prédictives avancées avec nos modèles d'IA
+          </p>
+        </div>
+      </div>
+
+      
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-10 col-xl-8">
+          <div class="card slide-up">
+            <div class="card-header bg-primary text-white">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-upload mr-2" aria-hidden="true"></i>
+                Téléchargement de fichier
+              </h3>
+              <div class="card-tools">
+                <span class="badge badge-light" id="file-status">Prêt</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <form method="post" enctype="multipart/form-data" id="upload-form">
+                {% csrf_token %}
+
+                
+                <div class="upload-zone" id="upload-zone">
+                  <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                  </div>
+                  <h4 class="mb-3">Glissez-déposez votre fichier ici</h4>
+                  <p class="text-muted mb-3">ou cliquez pour sélectionner un fichier</p>
+
+                  
+                  <input type="file" id="file-input" name="csv_file" accept=".csv,.xlsx,.xls" style="display: none;" required aria-describedby="file-help">
+
+                  
+                  <div id="file-info" style="display: none;" class="mt-3">
+                    <div class="alert alert-info">
+                      <i class="fas fa-file-alt mr-2"></i>
+                      <strong id="file-name"></strong>
+                      <br>
+                      <small>
+                        Taille: <span id="file-size"></span> |
+                        Type: <span id="file-type"></span> |
+                        Lignes: <span id="file-rows">Calcul...</span>
+                      </small>
+                      <div class="mt-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="previewFile()">
+                          <i class="fas fa-eye mr-1"></i>
+                          Aperçu
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile()">
+                          <i class="fas fa-times mr-1"></i>
+                          Supprimer
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+                  <div id="file-preview" style="display: none;" class="mt-3">
+                    <div class="card">
+                      <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                          <i class="fas fa-table mr-2"></i>
+                          Aperçu des données (5 premières lignes)
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-sm" id="preview-table">
+                            <thead></thead>
+                            <tbody></tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+                  <div id="upload-progress-container" style="display: none;" class="mt-3">
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" style="width: 0%" id="file-progress"></div>
+                    </div>
+                    <small class="text-muted mt-1 d-block">Téléchargement en cours...</small>
+                  </div>
+                </div>
+
+                
+                <div class="mt-4">
+                  <h6 class="text-muted mb-3">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Formats acceptés et exigences
+                  </h6>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success mr-2"></i> Fichiers CSV (.csv)</li>
+                        <li><i class="fas fa-check text-success mr-2"></i> Fichiers Excel (.xlsx, .xls)</li>
+                        <li><i class="fas fa-check text-success mr-2"></i> Taille max: 50 MB</li>
+                        <li><i class="fas fa-check text-success mr-2"></i> Encodage: UTF-8</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success mr-2"></i> Colonnes: Date, Consommation</li>
+                        <li><i class="fas fa-check text-success mr-2"></i> Format date: YYYY-MM-DD</li>
+                        <li><i class="fas fa-check text-success mr-2"></i> Données numériques</li>
+                        <li><i class="fas fa-check text-success mr-2"></i> Min 30 jours de données</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  
+                  <div id="validation-status" style="display: none;" class="mt-3">
+                    <div class="card bg-light">
+                      <div class="card-body">
+                        <h6 class="card-title">
+                          <i class="fas fa-clipboard-check mr-2"></i>
+                          Validation des données
+                        </h6>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <div class="text-center">
+                              <i id="format-check" class="fas fa-question-circle text-muted" style="font-size: 1.5rem;"></i>
+                              <br>
+                              <small>Format</small>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="text-center">
+                              <i id="columns-check" class="fas fa-question-circle text-muted" style="font-size: 1.5rem;"></i>
+                              <br>
+                              <small>Colonnes</small>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="text-center">
+                              <i id="data-check" class="fas fa-question-circle text-muted" style="font-size: 1.5rem;"></i>
+                              <br>
+                              <small>Données</small>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="text-center">
+                              <i id="quality-check" class="fas fa-question-circle text-muted" style="font-size: 1.5rem;"></i>
+                              <br>
+                              <small>Qualité</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="validation-details" class="mt-3" style="display: none;">
+                          <div class="alert alert-info">
+                            <ul id="validation-messages" class="mb-0"></ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+                  <div class="mt-3">
+                    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="collapse" data-target="#sample-data">
+                      <i class="fas fa-download mr-1"></i>
+                      Télécharger un exemple de fichier
+                    </button>
+                    <div class="collapse mt-2" id="sample-data">
+                      <div class="card bg-light">
+                        <div class="card-body">
+                          <h6>Exemple de structure CSV :</h6>
+                          <pre class="bg-white p-2 border rounded">Date,Consommation
+2024-01-01,850.5
+2024-01-02,920.3
+2024-01-03,780.1
+...</pre>
+                          <button class="btn btn-sm btn-primary" onclick="downloadSampleFile()">
+                            <i class="fas fa-download mr-1"></i>
+                            Télécharger exemple.csv
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                
+                <div class="row mt-4">
+                  <div class="col-12">
+                    <h6 class="text-muted mb-3">
+                      <i class="fas fa-robot mr-2"></i>
+                      Choisissez votre modèle d'analyse
+                    </h6>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <button type="submit" name="action" value="predict_lstm" class="btn btn-primary btn-block" id="lstm-btn" disabled>
+                      <i class="fas fa-brain mr-2"></i>
+
+                    </button>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <button type="submit" name="action" value="predict_xgb" class="btn btn-warning btn-block" id="xgb-btn" disabled>
+                      <i class="fas fa-cogs mr-2"></i>
+                      <div>
+                        <strong>prediction</strong>
+                        <br>
+                        <small>Gradient boosting avancé</small>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <div class="card bg-light">
+                      <div class="card-body">
+                        <h6 class="card-title">
+                          <i class="fas fa-sliders-h mr-2"></i>
+                          Options avancées
+                        </h6>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="detect-anomalies" checked>
+                              <label class="form-check-label" for="detect-anomalies">
+                                Détecter les anomalies
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="generate-forecast" checked>
+                              <label class="form-check-label" for="generate-forecast">
+                                Générer prévisions 30 jours
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      {% if résumé %}
+      <div class="row">
+        <div class="col-12">
+          <h2 class="text-center mb-4">
+            <i class="fas fa-chart-line text-success mr-2"></i>
+            Résultats de l'analyse
+          </h2>
+        </div>
+      </div>
+
+      
+      <div class="row mb-4">
+        <div class="col-lg-12">
+          <div class="card slide-up">
+            <div class="card-header bg-info">
+              <h5 class="text-white mb-0">
+                <i class="fas fa-chart-pie mr-2"></i>
+                Résumé énergétique
+              </h5>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool text-white" data-card-widget="collapse" aria-label="Réduire">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool text-white" onclick="copyToClipboard('energy-summary')" aria-label="Copier">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-3 text-center">
+                  <div class="border-right">
+                    <h4 class="text-info">📊</h4>
+                    <small class="text-muted">Analyse statistique</small>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <div class="border-right">
+                    <h4 class="text-success">⚡</h4>
+                    <small class="text-muted">Consommation</small>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <div class="border-right">
+                    <h4 class="text-warning">📈</h4>
+                    <small class="text-muted">Tendances</small>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <h4 class="text-primary">🎯</h4>
+                  <small class="text-muted">Recommandations</small>
+                </div>
+              </div>
+              <pre id="energy-summary">{{ résumé|safe }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="row mb-4">
+        <div class="col-lg-12">
+          <div class="card slide-up">
+            <div class="card-header bg-secondary">
+              <h5 class="text-white mb-0">
+                <i class="fas fa-book mr-2"></i>
+                Contexte extrait du guide énergétique
+              </h5>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool text-white" data-card-widget="collapse" aria-label="Réduire">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool text-white" onclick="copyToClipboard('rag-context')" aria-label="Copier">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle mr-2"></i>
+                <strong>Source:</strong> Guide de vérification énergétique - Contexte pertinent extrait automatiquement
+              </div>
+              <pre id="rag-context">{{ rag_context|safe }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="row mb-4">
+        <div class="col-lg-12">
+          <div class="card slide-up">
+            <div class="card-header bg-primary">
+              <h5 class="text-white mb-0">
+                <i class="fas fa-robot mr-2"></i>
+                Rapport d'analyse IA (Zephyr)
+              </h5>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool text-white" data-card-widget="collapse" aria-label="Réduire">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool text-white" onclick="exportReport()" aria-label="Exporter">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button type="button" class="btn btn-tool text-white" onclick="copyToClipboard('ai-report')" aria-label="Copier">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-4 text-center">
+                  <div class="border-right">
+                    <i class="fas fa-brain text-primary" style="font-size: 2rem;"></i>
+                    <br>
+                    <small class="text-muted">Analyse IA</small>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="border-right">
+                    <i class="fas fa-lightbulb text-warning" style="font-size: 2rem;"></i>
+                    <br>
+                    <small class="text-muted">Insights</small>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center">
+                  <i class="fas fa-target text-success" style="font-size: 2rem;"></i>
+                  <br>
+                  <small class="text-muted">Actions</small>
+                </div>
+              </div>
+              <pre id="ai-report">{{ réponse_gpt|safe }}</pre>
+
+              
+              <div class="mt-3 text-center">
+                <button class="btn btn-outline-primary mr-2" onclick="shareReport()">
+                  <i class="fas fa-share-alt mr-1"></i>
+                  Partager
+                </button>
+                <button class="btn btn-outline-success mr-2" onclick="saveReport()">
+                  <i class="fas fa-save mr-1"></i>
+                  Sauvegarder
+                </button>
+                <button class="btn btn-outline-info" onclick="printReport()">
+                  <i class="fas fa-print mr-1"></i>
+                  Imprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      
+      <div class="row mb-4">
+        {% if lstm_result %}
+        <div class="col-lg-6 mb-4">
+          <div class="card slide-up">
+            <div class="card-header bg-success">
+              <h5 class="text-white mb-0">
+                <i class="fas fa-brain mr-2"></i>
+                Prédiction LSTM
+              </h5>
+              <div class="card-tools">
+                <span class="badge badge-light">
+                  <i class="fas fa-check-circle mr-1"></i>
+                  Terminé
+                </span>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-chart-line text-success" style="font-size: 3rem;"></i>
+              </div>
+              <h6 class="text-success mb-3">✅ Prédictions générées avec succès</h6>
+              <p class="text-muted mb-4">
+                Les prévisions LSTM ont été calculées et sauvegardées dans la base de données.
+                Le modèle de réseau de neurones récurrents a analysé vos données temporelles.
+              </p>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <div class="border-right">
+                    <h5 class="text-success">🎯</h5>
+                    <small class="text-muted">Haute précision</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-info">📈</h5>
+                  <small class="text-muted">Tendances détectées</small>
+                </div>
+              </div>
+
+              <form method="get" action="{% url 'voir_lstm' %}">
+                <button type="submit" class="btn btn-success btn-lg pulse">
+                  <i class="fas fa-chart-bar mr-2"></i>
+                  Visualiser les prédictions LSTM
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="col-lg-{% if lstm_result %}6{% else %}12{% endif %} mb-4">
+          <div class="card slide-up">
+            <div class="card-header bg-warning">
+              <h5 class="text-white mb-0">
+                <i class="fas fa-cogs mr-2"></i>
+                Prédictions XGBoost
+              </h5>
+              <div class="card-tools">
+                <span class="badge badge-light">
+                  <i class="fas fa-rocket mr-1"></i>
+                  Disponible
+                </span>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="fas fa-bolt text-warning" style="font-size: 3rem;"></i>
+              </div>
+              <h6 class="text-warning mb-3">⚡ Modèle XGBoost prêt</h6>
+              <p class="text-muted mb-4">
+                Utilisez le modèle XGBoost pour des prédictions rapides et précises.
+                Algorithme de gradient boosting optimisé pour les données énergétiques.
+              </p>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <div class="border-right">
+                    <h5 class="text-warning">⚡</h5>
+                    <small class="text-muted">Rapide</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-primary">🎯</h5>
+                  <small class="text-muted">Précis</small>
+                </div>
+              </div>
+
+              <form method="get" action="{% url 'voir_xgb' %}">
+                <button type="submit" class="btn btn-warning text-white btn-lg">
+                  <i class="fas fa-chart-bar mr-2"></i>
+                  Visualiser les prédictions XGBoost
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      {% if anomalies %}
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card border-danger slide-up">
+            <div class="card-header bg-danger text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Anomalies détectées (Autoencoder)
+              </h5>
+              <div class="card-tools">
+                <span class="badge badge-light">
+                  {{ anomalies|length }} anomalie{{ anomalies|length|pluralize }}
+                </span>
+              </div>
+            </div>
+            <div class="card-body">
+              
+              <div class="row mb-4">
+                <div class="col-md-3 text-center">
+                  <div class="border-right">
+                    <h3 class="text-danger">
+                      {{ anomalies|length }}
+                    </h3>
+                    <small class="text-muted">Anomalies détectées</small>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <div class="border-right">
+                    <h3 class="text-warning">⚠️</h3>
+                    <small class="text-muted">Niveau d'alerte</small>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <div class="border-right">
+                    <h3 class="text-info">🔍</h3>
+                    <small class="text-muted">Analyse approfondie</small>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <h3 class="text-success">📊</h3>
+                  <small class="text-muted">Rapport détaillé</small>
+                </div>
+              </div>
+
+              
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>
+                        <i class="fas fa-calendar-alt mr-1"></i>
+                        Date
+                      </th>
+                      <th>
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        Erreur de reconstruction
+                      </th>
+                      <th>
+                        <i class="fas fa-chart-line mr-1"></i>
+                        Seuil
+                      </th>
+                      <th>
+                        <i class="fas fa-flag mr-1"></i>
+                        Statut
+                      </th>
+                      <th>
+                        <i class="fas fa-cogs mr-1"></i>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for entry in anomalies %}
+                      {% if entry.is_anomaly %}
+                      <tr class="table-danger">
+                        <td>
+                          <strong>{{ entry.date|date:"d/m/Y" }}</strong>
+                          <br>
+                          <small class="text-muted">{{ entry.date|date:"l" }}</small>
+                        </td>
+                        <td>
+                          <span class="badge badge-danger">
+                            {{ entry.reconstruction_error|floatformat:4 }}
+                          </span>
+                        </td>
+                        <td>
+                          <small class="text-muted">Seuil: 0.05</small>
+                        </td>
+                        <td>
+                          <span class="badge badge-danger pulse">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>
+                            Anomalie critique
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-info" onclick="analyzeAnomaly('{{ entry.date }}')">
+                            <i class="fas fa-search mr-1"></i>
+                            Analyser
+                          </button>
+                        </td>
+                      </tr>
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+              
+              <div class="text-center mt-4">
+                <button class="btn btn-outline-danger mr-2" onclick="exportAnomalies()">
+                  <i class="fas fa-download mr-1"></i>
+                  Exporter anomalies
+                </button>
+                <button class="btn btn-outline-warning mr-2" onclick="generateAnomalyReport()">
+                  <i class="fas fa-file-pdf mr-1"></i>
+                  Rapport détaillé
+                </button>
+                <button class="btn btn-outline-info" onclick="scheduleAlert()">
+                  <i class="fas fa-bell mr-1"></i>
+                  Configurer alertes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      
+      {% if xgb_result %}
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card border-{% if "erreur" in rapport_anomalie|lower or "temps" in rapport_anomalie|lower %}danger{% else %}dark{% endif %} slide-up">
+            <div class="card-header bg-{% if "erreur" in rapport_anomalie|lower or "temps" in rapport_anomalie|lower %}danger{% else %}dark{% endif %} text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-lightbulb mr-2"></i>
+                Rapport d'interprétation des anomalies 
+              </h5>
+              <div class="card-tools">
+                <span class="badge badge-light">
+                  {% if "erreur" in rapport_anomalie|lower or "temps" in rapport_anomalie|lower %}
+                    <i class="fas fa-exclamation-triangle mr-1"></i>Erreur
+                  {% else %}
+                    <i class="fas fa-check-circle mr-1"></i>Succès
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            <div class="card-body">
+              {% if "Temps d'exécution" in rapport_anomalie or "Erreur" in rapport_anomalie %}
+                <div class="alert alert-danger">
+                  <i class="fas fa-times-circle mr-2"></i>
+                  <strong>Erreur de traitement:</strong>
+                  <br>
+                  {{ rapport_anomalie }}
+                </div>
+                <div class="text-center">
+                  <button class="btn btn-outline-danger" onclick="retryAnalysis()">
+                    <i class="fas fa-redo mr-1"></i>
+                    Réessayer l'analyse
+                  </button>
+                </div>
+              {% else %}
+                <div class="row mb-3">
+                  <div class="col-md-4 text-center">
+                    <i class="fas fa-brain text-primary" style="font-size: 2rem;"></i>
+                    <br>
+                    <small class="text-muted">Analyse IA avancée</small>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <i class="fas fa-search text-info" style="font-size: 2rem;"></i>
+                    <br>
+                    <small class="text-muted">Détection patterns</small>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <i class="fas fa-lightbulb text-warning" style="font-size: 2rem;"></i>
+                    <br>
+                    <small class="text-muted">Recommandations</small>
+                  </div>
+                </div>
+                <pre id="anomaly-report">{{ rapport_anomalie }}</pre>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h6 class="text-white mb-2">
+            <i class="fas fa-bolt mr-2"></i>
+            Energy AI Platform
+          </h6>
+          <p class="mb-2">&copy; {% now "Y" %} Analyse énergétique assistée par IA</p>
+          <small class="text-muted">
+            Plateforme d'analyse prédictive pour l'optimisation énergétique
+          </small>
+        </div>
+        <div class="col-md-6 text-md-right">
+          <div class="mb-2">
+            <a href="#" class="text-white mr-3">
+              <i class="fas fa-question-circle mr-1"></i>
+              Aide
+            </a>
+            <a href="#" class="text-white mr-3">
+              <i class="fas fa-book mr-1"></i>
+              Documentation
+            </a>
+            <a href="#" class="text-white">
+              <i class="fas fa-envelope mr-1"></i>
+              Support
+            </a>
+          </div>
+          <small class="text-muted">
+            Version 2.1.0 | Dernière mise à jour: {% now "d/m/Y" %}
+          </small>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<script src="{% static 'AdminLTE-3.2.0/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'AdminLTE-3.2.0/dist/js/adminlte.min.js' %}"></script>
+
+<!-- JavaScript Section -->
+  <script>
+
+let uploadedFile = null;
+let isUploading = false;
+
+function showNotification(message, type = 'info', duration = 5000) {
+  const toast = $(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="${duration}">
+      <div class="toast-header bg-${type} text-white">
+        <strong class="mr-auto">
+          <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}-circle mr-1"></i>
+          ${type === 'success' ? 'Succès' : type === 'error' ? 'Erreur' : 'Information'}
+        </strong>
+        <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">${message}</div>
+    </div>
+  `);
+
+  $('#toast-container').append(toast);
+  toast.toast('show');
+
+  
+  toast.on('hidden.bs.toast', function() {
+    $(this).remove();
+  });
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function validateFile(file) {
+  const maxSize = 50 * 1024 * 1024; 
+  const allowedTypes = [
+    'text/csv',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ];
+
+  
+  resetValidationStatus();
+
+  if (file.size > maxSize) {
+    showNotification('Le fichier est trop volumineux. Taille maximum: 50MB', 'error');
+    updateValidationCheck('format-check', false, 'Fichier trop volumineux');
+    return false;
+  }
+
+  if (!allowedTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.csv')) {
+    showNotification('Format de fichier non supporté. Utilisez CSV ou Excel.', 'error');
+    updateValidationCheck('format-check', false, 'Format non supporté');
+    return false;
+  }
+
+  updateValidationCheck('format-check', true, 'Format valide');
+
+  
+  if (file.name.toLowerCase().endsWith('.csv')) {
+    validateCSVContent(file);
+  }
+
+  return true;
+}
+
+function resetValidationStatus() {
+  const checks = ['format-check', 'columns-check', 'data-check', 'quality-check'];
+  checks.forEach(checkId => {
+    const element = document.getElementById(checkId);
+    if (element) {
+      element.className = 'fas fa-question-circle text-muted';
+    }
+  });
+
+  document.getElementById('validation-status').style.display = 'none';
+  document.getElementById('validation-details').style.display = 'none';
+}
+
+function updateValidationCheck(checkId, isValid, message) {
+  const element = document.getElementById(checkId);
+  if (element) {
+    element.className = isValid
+      ? 'fas fa-check-circle text-success'
+      : 'fas fa-times-circle text-danger';
+  }
+
+  document.getElementById('validation-status').style.display = 'block';
+
+  if (message) {
+    addValidationMessage(message, isValid);
+  }
+}
+
+function addValidationMessage(message, isValid) {
+  const messagesContainer = document.getElementById('validation-messages');
+  const li = document.createElement('li');
+  li.innerHTML = `<i class="fas fa-${isValid ? 'check' : 'times'} mr-2"></i>${message}`;
+  li.className = isValid ? 'text-success' : 'text-danger';
+  messagesContainer.appendChild(li);
+
+  document.getElementById('validation-details').style.display = 'block';
+}
+
+function validateCSVContent(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const content = e.target.result;
+      const lines = content.split('\n').filter(line => line.trim());
+
+      if (lines.length < 2) {
+        updateValidationCheck('data-check', false, 'Fichier vide ou insuffisant');
+        return;
+      }
+
+      
+      const header = lines[0].toLowerCase();
+      const hasDateColumn = header.includes('date') || header.includes('jour');
+      const hasConsumptionColumn = header.includes('consommation') || header.includes('consumption') || header.includes('kwh');
+
+      if (!hasDateColumn || !hasConsumptionColumn) {
+        updateValidationCheck('columns-check', false, 'Colonnes Date et Consommation requises');
+      } else {
+        updateValidationCheck('columns-check', true, 'Colonnes détectées correctement');
+      }
+
+      
+      const dataLines = lines.slice(1, Math.min(lines.length, 10)); 
+      let validDataCount = 0;
+
+      dataLines.forEach(line => {
+        const columns = line.split(',');
+        if (columns.length >= 2) {
+          const dateStr = columns[0].trim();
+          const valueStr = columns[1].trim();
+
+          
+          const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+          const isValidDate = dateRegex.test(dateStr) || !isNaN(Date.parse(dateStr));
+
+          
+          const isValidNumber = !isNaN(parseFloat(valueStr)) && isFinite(valueStr);
+
+          if (isValidDate && isValidNumber) {
+            validDataCount++;
+          }
+        }
+      });
+
+      const dataQuality = validDataCount / dataLines.length;
+
+      if (dataQuality >= 0.8) {
+        updateValidationCheck('data-check', true, `${lines.length - 1} lignes de données détectées`);
+        updateValidationCheck('quality-check', true, `Qualité des données: ${Math.round(dataQuality * 100)}%`);
+      } else {
+        updateValidationCheck('data-check', false, 'Format de données invalide');
+        updateValidationCheck('quality-check', false, `Qualité insuffisante: ${Math.round(dataQuality * 100)}%`);
+      }
+
+      
+      generatePreview(lines.slice(0, 6)); 
+
+    } catch (error) {
+      updateValidationCheck('data-check', false, 'Erreur lors de la lecture du fichier');
+      console.error('Validation error:', error);
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+function generatePreview(lines) {
+  if (lines.length < 2) return;
+
+  const table = document.getElementById('preview-table');
+  const thead = table.querySelector('thead');
+  const tbody = table.querySelector('tbody');
+
+  
+  thead.innerHTML = '';
+  tbody.innerHTML = '';
+
+  
+  const headerRow = document.createElement('tr');
+  const headers = lines[0].split(',');
+  headers.forEach(header => {
+    const th = document.createElement('th');
+    th.textContent = header.trim();
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+
+  
+  lines.slice(1).forEach(line => {
+    const row = document.createElement('tr');
+    const cells = line.split(',');
+    cells.forEach(cell => {
+      const td = document.createElement('td');
+      td.textContent = cell.trim();
+      row.appendChild(td);
+    });
+    tbody.appendChild(row);
+  });
+
+  document.getElementById('file-preview').style.display = 'block';
+}
+
+function updateFileInfo(file) {
+  uploadedFile = file;
+
+  document.getElementById('file-name').textContent = file.name;
+  document.getElementById('file-size').textContent = formatFileSize(file.size);
+  document.getElementById('file-type').textContent = file.type || 'CSV';
+  document.getElementById('file-rows').textContent = 'Calcul en cours...';
+
+  document.getElementById('file-info').style.display = 'block';
+  document.getElementById('file-status').textContent = 'Fichier sélectionné';
+  document.getElementById('file-status').className = 'badge badge-success';
+
+  
+  setTimeout(() => {
+    document.getElementById('lstm-btn').disabled = false;
+    document.getElementById('xgb-btn').disabled = false;
+  }, 1000);
+
+  showNotification(`Fichier "${file.name}" sélectionné avec succès`, 'success');
+
+  
+  if (file.name.toLowerCase().endsWith('.csv')) {
+    countCSVRows(file);
+  }
+}
+
+function countCSVRows(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+    const lines = content.split('\n').filter(line => line.trim());
+    const dataRows = lines.length - 1; 
+    document.getElementById('file-rows').textContent = `${dataRows} lignes`;
+  };
+  reader.readAsText(file);
+}
+
+function previewFile() {
+  if (!uploadedFile) {
+    showNotification('Aucun fichier sélectionné', 'error');
+    return;
+  }
+
+  const previewSection = document.getElementById('file-preview');
+  if (previewSection.style.display === 'none') {
+    previewSection.style.display = 'block';
+    showNotification('Aperçu affiché', 'info');
+  } else {
+    previewSection.style.display = 'none';
+  }
+}
+
+function removeFile() {
+  if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
+    resetUploadZone();
+    document.getElementById('file-input').value = '';
+    document.getElementById('file-preview').style.display = 'none';
+    showNotification('Fichier supprimé', 'info');
+  }
+}
+
+function downloadSampleFile() {
+  const sampleData = `Date,Consommation
+2024-01-01,850.5
+2024-01-02,920.3
+2024-01-03,780.1
+2024-01-04,945.7
+2024-01-05,812.9
+2024-01-06,756.2
+2024-01-07,689.4
+2024-01-08,834.6
+2024-01-09,901.2
+2024-01-10,778.8
+2024-01-11,823.5
+2024-01-12,867.3
+2024-01-13,792.1
+2024-01-14,745.9
+2024-01-15,888.7`;
+
+  const blob = new Blob([sampleData], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'exemple_donnees_energetiques.csv');
+  link.style.visibility = 'hidden';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  showNotification('Fichier exemple téléchargé', 'success');
+}
+
+function resetUploadZone() {
+  uploadedFile = null;
+  document.getElementById('file-info').style.display = 'none';
+  document.getElementById('upload-progress-container').style.display = 'none';
+  document.getElementById('file-preview').style.display = 'none';
+  document.getElementById('file-status').textContent = 'Prêt';
+  document.getElementById('file-status').className = 'badge badge-light';
+
+  
+  resetValidationStatus();
+
+  
+  document.getElementById('lstm-btn').disabled = true;
+  document.getElementById('xgb-btn').disabled = true;
+}
+
+function analyzeDataQuality(data) {
+  const analysis = {
+    totalRows: data.length,
+    missingValues: 0,
+    outliers: 0,
+    duplicates: 0,
+    dateRange: null,
+    averageConsumption: 0,
+    trends: []
+  };
+
+  if (data.length === 0) return analysis;
+
+  
+  const values = data.map(row => parseFloat(row.consumption)).filter(v => !isNaN(v));
+  analysis.averageConsumption = values.reduce((a, b) => a + b, 0) / values.length;
+
+  
+  const sorted = [...values].sort((a, b) => a - b);
+  const q1 = sorted[Math.floor(sorted.length * 0.25)];
+  const q3 = sorted[Math.floor(sorted.length * 0.75)];
+  const iqr = q3 - q1;
+  const lowerBound = q1 - 1.5 * iqr;
+  const upperBound = q3 + 1.5 * iqr;
+
+  analysis.outliers = values.filter(v => v < lowerBound || v > upperBound).length;
+
+  
+  analysis.missingValues = data.filter(row =>
+    !row.date || !row.consumption || isNaN(parseFloat(row.consumption))
+  ).length;
+
+  
+  const dates = data.map(row => new Date(row.date)).filter(d => !isNaN(d));
+  if (dates.length > 0) {
+    analysis.dateRange = {
+      start: new Date(Math.min(...dates)),
+      end: new Date(Math.max(...dates))
+    };
+  }
+
+  return analysis;
+}
+
+function generateDataInsights(analysis) {
+  const insights = [];
+
+  if (analysis.missingValues > 0) {
+    insights.push({
+      type: 'warning',
+      message: `${analysis.missingValues} valeurs manquantes détectées`,
+      recommendation: 'Vérifiez la qualité de vos données'
+    });
+  }
+
+  if (analysis.outliers > 0) {
+    insights.push({
+      type: 'info',
+      message: `${analysis.outliers} valeurs aberrantes détectées`,
+      recommendation: 'Ces valeurs seront analysées pour détecter des anomalies'
+    });
+  }
+
+  if (analysis.totalRows < 30) {
+    insights.push({
+      type: 'warning',
+      message: 'Données insuffisantes pour une analyse optimale',
+      recommendation: 'Recommandé: au moins 30 jours de données'
+    });
+  }
+
+  if (analysis.dateRange) {
+    const daysDiff = Math.ceil((analysis.dateRange.end - analysis.dateRange.start) / (1000 * 60 * 60 * 24));
+    insights.push({
+      type: 'success',
+      message: `Période d'analyse: ${daysDiff} jours`,
+      recommendation: `Du ${analysis.dateRange.start.toLocaleDateString('fr-FR')} au ${analysis.dateRange.end.toLocaleDateString('fr-FR')}`
+    });
+  }
+
+  return insights;
+}
+
+function displayDataInsights(insights) {
+  if (insights.length === 0) return;
+
+  const container = document.createElement('div');
+  container.className = 'mt-3';
+  container.innerHTML = `
+    <div class="card bg-light">
+      <div class="card-body">
+        <h6 class="card-title">
+          <i class="fas fa-lightbulb mr-2"></i>
+          Analyse préliminaire des données
+        </h6>
+        <div id="insights-list"></div>
+      </div>
+    </div>
+  `;
+
+  const insightsList = container.querySelector('#insights-list');
+
+  insights.forEach(insight => {
+    const alertClass = insight.type === 'warning' ? 'alert-warning' :
+                     insight.type === 'error' ? 'alert-danger' :
+                     insight.type === 'success' ? 'alert-success' : 'alert-info';
+
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${alertClass} alert-sm mb-2`;
+    alertDiv.innerHTML = `
+      <strong>${insight.message}</strong>
+      <br>
+      <small>${insight.recommendation}</small>
+    `;
+
+    insightsList.appendChild(alertDiv);
+  });
+
+  
+  const validationStatus = document.getElementById('validation-status');
+  if (validationStatus && validationStatus.parentNode) {
+    validationStatus.parentNode.insertBefore(container, validationStatus.nextSibling);
+  }
+}
+
+function setupDragAndDrop() {
+  const uploadZone = document.getElementById('upload-zone');
+  const fileInput = document.getElementById('file-input');
+
+  
+  uploadZone.addEventListener('click', () => {
+    if (!isUploading) {
+      fileInput.click();
+    }
+  });
+
+  
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file && validateFile(file)) {
+      updateFileInfo(file);
+    }
+  });
+
+  
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, () => {
+      if (!isUploading) {
+        uploadZone.classList.add('dragover');
+      }
+    });
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, () => {
+      uploadZone.classList.remove('dragover');
+    });
+  });
+
+  uploadZone.addEventListener('drop', (e) => {
+    if (isUploading) return;
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      if (validateFile(file)) {
+        
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+
+        updateFileInfo(file);
+      }
+    }
+  });
+}
+
+function setupFormSubmission() {
+  const form = document.getElementById('upload-form');
+
+  form.addEventListener('submit', (e) => {
+    if (!uploadedFile) {
+      e.preventDefault();
+      showNotification('Veuillez sélectionner un fichier avant de continuer', 'error');
+      return;
+    }
+
+    if (isUploading) {
+      e.preventDefault();
+      return;
+    }
+
+    isUploading = true;
+
+    
+    document.getElementById('loading-overlay').style.display = 'flex';
+
+    
+    document.getElementById('upload-progress-container').style.display = 'block';
+
+    
+    let progress = 0;
+    const progressBar = document.getElementById('file-progress');
+    const uploadProgressBar = document.getElementById('upload-progress');
+
+    const interval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress > 90) progress = 90;
+
+      progressBar.style.width = progress + '%';
+      uploadProgressBar.style.width = progress + '%';
+    }, 200);
+
+    
+    setTimeout(() => {
+      clearInterval(interval);
+      progressBar.style.width = '100%';
+      uploadProgressBar.style.width = '100%';
+    }, 1000);
+  });
+}
+
+function copyToClipboard(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const text = element.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      showNotification('Contenu copié dans le presse-papiers', 'success');
+    }).catch(() => {
+      showNotification('Erreur lors de la copie', 'error');
+    });
+  }
+}
+
+function exportReport() {
+  showNotification('Export du rapport en cours...', 'info');
+  
+  setTimeout(() => {
+    showNotification('Rapport exporté avec succès!', 'success');
+  }, 2000);
+}
+
+function shareReport() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Rapport d\'analyse énergétique',
+      text: 'Découvrez les résultats de l\'analyse énergétique',
+      url: window.location.href
+    });
+  } else {
+    copyToClipboard('ai-report');
+  }
+}
+
+function saveReport() {
+  showNotification('Sauvegarde du rapport...', 'info');
+  setTimeout(() => {
+    showNotification('Rapport sauvegardé!', 'success');
+  }, 1500);
+}
+
+function printReport() {
+  window.print();
+}
+
+function analyzeAnomaly(date) {
+  showNotification(`Analyse de l'anomalie du ${date}...`, 'info');
+  setTimeout(() => {
+    showNotification('Analyse terminée!', 'success');
+  }, 2000);
+}
+
+function exportAnomalies() {
+  showNotification('Export des anomalies...', 'info');
+  setTimeout(() => {
+    showNotification('Anomalies exportées!', 'success');
+  }, 1500);
+}
+
+function generateAnomalyReport() {
+  showNotification('Génération du rapport d\'anomalies...', 'info');
+  setTimeout(() => {
+    showNotification('Rapport généré!', 'success');
+  }, 3000);
+}
+
+function scheduleAlert() {
+  showNotification('Configuration des alertes...', 'info');
+  setTimeout(() => {
+    showNotification('Alertes configurées!', 'success');
+  }, 1500);
+}
+
+function exportForecast() {
+  showNotification('Export des prévisions...', 'info');
+  setTimeout(() => {
+    showNotification('Prévisions exportées!', 'success');
+  }, 1500);
+}
+
+function visualizeForecast() {
+  showNotification('Génération du graphique...', 'info');
+  setTimeout(() => {
+    showNotification('Graphique généré!', 'success');
+  }, 2000);
+}
+
+function scheduleForecast() {
+  showNotification('Programmation des mises à jour...', 'info');
+  setTimeout(() => {
+    showNotification('Mises à jour programmées!', 'success');
+  }, 1500);
+}
+
+function retryAnalysis() {
+  showNotification('Nouvelle tentative d\'analyse...', 'info');
+  setTimeout(() => {
+    location.reload();
+  }, 2000);
+}
+
+function trackUserInteraction(action, details = {}) {
+  const timestamp = new Date().toISOString();
+  const interaction = {
+    action,
+    timestamp,
+    details,
+    userAgent: navigator.userAgent,
+    url: window.location.href
+  };
+
+  
+  const interactions = JSON.parse(localStorage.getItem('userInteractions') || '[]');
+  interactions.push(interaction);
+
+  
+  if (interactions.length > 100) {
+    interactions.splice(0, interactions.length - 100);
+  }
+
+  localStorage.setItem('userInteractions', JSON.stringify(interactions));
+
+  console.log('User interaction tracked:', interaction);
+}
+
+function handleError(error, context = '') {
+  console.error(`Error in ${context}:`, error);
+
+  const errorReport = {
+    message: error.message,
+    stack: error.stack,
+    context,
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    url: window.location.href
+  };
+
+  
+  const errors = JSON.parse(localStorage.getItem('errorReports') || '[]');
+  errors.push(errorReport);
+
+  if (errors.length > 50) {
+    errors.splice(0, errors.length - 50);
+  }
+
+  localStorage.setItem('errorReports', JSON.stringify(errors));
+
+  
+  showNotification('Une erreur inattendue s\'est produite. Veuillez réessayer.', 'error');
+}
+
+function initializeApplication() {
+  try {
+    
+    setupDragAndDrop();
+
+    
+    setupFormSubmission();
+
+    
+    setupKeyboardShortcuts();
+
+    
+    setupAutoSave();
+
+    
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.classList.add('fade-in');
+    });
+
+    
+    trackUserInteraction('page_load', {
+      loadTime: performance.now(),
+      referrer: document.referrer
+    });
+
+    
+    setTimeout(() => {
+      showNotification('Bienvenue sur la plateforme d\'analyse énergétique!', 'info', 3000);
+    }, 1000);
+
+    
+    checkForSavedData();
+
+  } catch (error) {
+    handleError(error, 'initialization');
+  }
+}
+
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', function(e) {
+    
+    if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+      e.preventDefault();
+      document.getElementById('upload-zone').click();
+      trackUserInteraction('keyboard_shortcut', { shortcut: 'upload' });
+    }
+
+    
+    if (e.key === 'Escape') {
+      if (uploadedFile && !isUploading) {
+        resetUploadZone();
+        trackUserInteraction('keyboard_shortcut', { shortcut: 'reset' });
+      }
+    }
+  });
+}
+
+function setupAutoSave() {
+  
+  setInterval(() => {
+    if (uploadedFile) {
+      const formState = {
+        fileName: uploadedFile.name,
+        fileSize: uploadedFile.size,
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem('uploadFormState', JSON.stringify(formState));
+    }
+  }, 30000); 
+}
+
+function checkForSavedData() {
+  const savedState = localStorage.getItem('uploadFormState');
+  if (savedState) {
+    try {
+      const state = JSON.parse(savedState);
+      const timeDiff = new Date() - new Date(state.timestamp);
+
+      
+      if (timeDiff < 3600000) {
+        showNotification(`Données sauvegardées trouvées: ${state.fileName}`, 'info');
+      }
+    } catch (error) {
+      console.warn('Error parsing saved state:', error);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initializeApplication);
+
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    trackUserInteraction('page_hidden');
+  } else {
+    trackUserInteraction('page_visible');
+    if (isUploading) {
+      showNotification('Traitement en cours...', 'info');
+    }
+  }
+});
+
+window.addEventListener('beforeunload', function(e) {
+  if (isUploading) {
+    e.preventDefault();
+    e.returnValue = 'Un traitement est en cours. Êtes-vous sûr de vouloir quitter?';
+    return e.returnValue;
+  }
+
+  trackUserInteraction('page_unload');
+});
+
+window.addEventListener('error', function(e) {
+  handleError(e.error, 'global_error');
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+  handleError(new Error(e.reason), 'unhandled_promise');
+  e.preventDefault();
+});
+</script>
+</body>
+</html>

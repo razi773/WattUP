@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.django_secret
+.env
+*.sqlite3
+.DS_Store

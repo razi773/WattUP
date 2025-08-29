@@ -1,0 +1,1346 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscription - FaceAuth AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Créez votre compte avec reconnaissance faciale avancée">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AdminLTE CSS -->
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/dist/css/adminlte.min.css' %}">
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <style>
+    :root {
+      --primary-color: #667eea;
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-color: #f093fb;
+      --success-color: #4facfe;
+      --danger-color: #ff6b6b;
+      --warning-color: #feca57;
+      --info-color: #48cae4;
+      --dark-color: #2c3e50;
+      --light-color: #f8f9fa;
+      --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+      --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.2);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--primary-gradient);
+      min-height: 100vh;
+      padding: 20px 0;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background overlay effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("{% static 'images/bg-login1.png' %}") no-repeat center center;
+      background-size: cover;
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .shape:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+    .shape:nth-child(2) { width: 60px; height: 60px; top: 20%; right: 10%; animation-delay: 2s; }
+    .shape:nth-child(3) { width: 100px; height: 100px; bottom: 10%; left: 20%; animation-delay: 4s; }
+    .shape:nth-child(4) { width: 40px; height: 40px; bottom: 20%; right: 20%; animation-delay: 6s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+      50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+    }
+
+    .register-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .register-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-heavy);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    
+    .logo-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+      animation: logoEntrance 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .brand-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 25px;
+      object-fit: contain;
+      object-position: center;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.05) rotate(3deg);
+      box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        0 0 30px rgba(102, 126, 234, 0.6);
+    }
+
+    .logo-glow {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      background: linear-gradient(45deg,
+        rgba(102, 126, 234, 0.3),
+        rgba(240, 147, 251, 0.3),
+        rgba(79, 172, 254, 0.3)
+      );
+      border-radius: 35px;
+      animation: logoGlow 3s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes logoEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.5) rotate(-180deg);
+      }
+      50% {
+        opacity: 0.8;
+        transform: translateY(-10px) scale(1.1) rotate(-90deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes logoGlow {
+      0%, 100% {
+        opacity: 0.5;
+        transform: scale(1) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1) rotate(180deg);
+      }
+    }
+
+    .card-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      animation: shimmer 4s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .brand-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-body {
+      padding: 40px 30px;
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .progress-step {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 10px;
+      font-weight: 600;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .progress-step.active {
+      background: var(--primary-color);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .progress-step.completed {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .progress-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 20px;
+      height: 2px;
+      background: #e9ecef;
+      transform: translateY(-50%);
+    }
+
+    .progress-step:last-child::after {
+      display: none;
+    }
+
+    .progress-step.completed::after {
+      background: var(--success-color);
+    }
+
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+      animation: fadeInRight 0.5s ease-out;
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-control {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px 20px;
+      font-size: 16px;
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      background: white;
+    }
+
+    .form-control.is-valid {
+      border-color: var(--success-color);
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2300d084' d='m2.3 6.73.6-.6 1.4-1.4.6-.6L7 1.73l-.6-.6L4 3.53l-.6-.6-1.4-1.4-.6-.6L1 2.13z'/%3e%3c/svg%3e");
+    }
+
+    .form-control.is-invalid {
+      border-color: var(--danger-color);
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.8 4.3 1.4 1.4M7.2 4.3 5.8 5.7'/%3e%3c/svg%3e");
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group-text {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 0 8px 8px 0;
+      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-info {
+      background: var(--info-color);
+      color: white;
+    }
+
+    .camera-section {
+      background: #f8f9fa;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      margin: 20px 0;
+      text-align: center;
+      border: 2px dashed #dee2e6;
+      transition: var(--transition);
+    }
+
+    .camera-section.active {
+      border-color: var(--primary-color);
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    #video {
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-medium);
+      max-width: 100%;
+      height: auto;
+      background: #000;
+    }
+
+    .photo-preview {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #capturedPhoto {
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-medium);
+      max-width: 100%;
+      height: auto;
+      border: 3px solid var(--success-color);
+    }
+
+    .capture-controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .step-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .alert {
+      border-radius: var(--border-radius);
+      border: none;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      animation: slideInDown 0.5s ease-out;
+    }
+
+    .alert-danger {
+      background: linear-gradient(45deg, #ff9a9e, #fecfef);
+      color: #721c24;
+    }
+
+    .alert-success {
+      background: linear-gradient(45deg, #a8edea, #fed6e3);
+      color: #155724;
+    }
+
+    .invalid-feedback {
+      display: block;
+      color: var(--danger-color);
+      font-size: 0.875rem;
+      margin-top: 5px;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .login-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .login-link a:hover {
+      color: var(--secondary-color);
+    }
+
+    
+    @media (max-width: 768px) {
+      .register-container {
+        padding: 10px;
+      }
+
+      .card-body {
+        padding: 30px 20px;
+      }
+
+      .brand-title {
+        font-size: 2rem;
+      }
+
+      .capture-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .step-navigation {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .progress-indicator {
+        flex-wrap: wrap;
+      }
+
+      .progress-step {
+        margin: 5px;
+      }
+
+      .brand-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    
+    .modern-footer {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 100px;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .footer-section {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    .footer-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-description {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .social-link:hover {
+      background: var(--primary-gradient);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .footer-contact p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .footer-bottom-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-bottom-links a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-bottom-links a:hover {
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 40px 20px 30px;
+      }
+
+      .footer-bottom-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .footer-bottom-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="register-container">
+    <div class="register-card animate__animated animate__fadeIn">
+      
+      <div class="card-header">
+        
+        <div class="logo-container">
+          <img src="{% static 'images/bg-login1.png' %}" alt="FaceAuth Logo" class="brand-logo">
+          <div class="logo-glow"></div>
+        </div>
+
+        <h1 class="brand-title">
+          SFM<span style="font-weight: 300;">technologies</span>
+        </h1>
+        
+      </div>
+
+      
+      <div class="card-body">
+        
+        <div class="progress-indicator">
+          <div class="progress-step active" data-step="1">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="progress-step" data-step="2">
+            <i class="fas fa-camera"></i>
+          </div>
+          <div class="progress-step" data-step="3">
+            <i class="fas fa-check"></i>
+          </div>
+        </div>
+
+        
+        {% if error %}
+          <div class="alert alert-danger animate__animated animate__shakeX">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ error }}
+          </div>
+        {% endif %}
+
+        
+        <form method="POST" id="registerForm">
+          {% csrf_token %}
+
+          
+          <div class="form-step active" data-step="1">
+            <h4 class="mb-4 text-center">Informations personnelles</h4>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="firstname" class="form-control" placeholder="Prénom" required>
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <i class="fas fa-user"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="lastname" class="form-control" placeholder="Nom de famille" required>
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <i class="fas fa-user-tag"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group">
+                <input type="email" name="email" class="form-control" placeholder="Adresse email" required>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="fas fa-envelope"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="tel" name="phone" class="form-control" placeholder="Téléphone">
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <i class="fas fa-phone"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input type="text" name="address" class="form-control" placeholder="Adresse">
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group">
+                <input type="password" name="password" class="form-control" placeholder="Mot de passe (min. 8 caractères)" required minlength="8">
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group">
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirmer le mot de passe" required>
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="form-step" data-step="2">
+            <h4 class="mb-4 text-center">Capture de votre photo</h4>
+
+            <div class="camera-section" id="cameraSection">
+              <div class="mb-3">
+                <i class="fas fa-camera fa-3x text-primary mb-3"></i>
+                <p class="text-muted">Positionnez votre visage dans le cadre et capturez votre photo</p>
+              </div>
+
+              <video id="video" width="400" height="300" autoplay muted playsinline></video>
+              <canvas id="canvas" width="400" height="300" style="display: none;"></canvas>
+
+              <div class="capture-controls">
+                <button type="button" class="btn btn-info" onclick="capturePhoto()">
+                  <i class="fas fa-camera"></i> Capturer
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="retakePhoto()" style="display: none;" id="retakeBtn">
+                  <i class="fas fa-redo"></i> Reprendre
+                </button>
+              </div>
+
+              <div class="photo-preview" id="photoPreview" style="display: none;">
+                <h5 class="mt-3 mb-2">Photo capturée :</h5>
+                <img id="capturedPhoto" src="" alt="Photo capturée" />
+              </div>
+            </div>
+
+            <input type="hidden" name="image_data" id="image_data">
+          </div>
+
+          
+          <div class="form-step" data-step="3">
+            <h4 class="mb-4 text-center">Confirmation</h4>
+
+            <div class="text-center">
+              <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+              <h5>Inscription presque terminée !</h5>
+              <p class="text-muted mb-4">Vérifiez vos informations avant de finaliser votre inscription.</p>
+
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div id="summaryInfo" class="text-left">
+                        
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div id="summaryPhoto">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="step-navigation">
+            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+              <i class="fas fa-arrow-left"></i> Précédent
+            </button>
+            <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+              Suivant <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
+              <i class="fas fa-user-plus"></i> Créer le compte
+            </button>
+          </div>
+        </form>
+
+        
+        <div class="login-link">
+          <p>Vous avez déjà un compte ?
+            <a href="{% url 'login' %}">Se connecter</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="{% static 'AdminLTE-3.2.0/plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'AdminLTE-3.2.0/dist/js/adminlte.min.js' %}"></script>
+
+  <script>
+    
+    let currentStep = 1;
+    const totalSteps = 3;
+    let cameraStream = null;
+    let photoTaken = false;
+
+    
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const capturedPhoto = document.getElementById('capturedPhoto');
+    const imageDataInput = document.getElementById('image_data');
+    const form = document.getElementById('registerForm');
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStepDisplay();
+      enhanceFormValidation();
+
+      
+      document.documentElement.style.scrollBehavior = 'smooth';
+    });
+
+    
+    function changeStep(direction) {
+      if (direction === 1 && !validateCurrentStep()) {
+        return;
+      }
+
+      const newStep = currentStep + direction;
+
+      if (newStep >= 1 && newStep <= totalSteps) {
+        currentStep = newStep;
+        updateStepDisplay();
+
+        
+        if (currentStep === 2 && !cameraStream) {
+          initializeCamera();
+        }
+
+        
+        if (currentStep === 3) {
+          updateSummary();
+        }
+      }
+    }
+
+    
+    function updateStepDisplay() {
+      
+      document.querySelectorAll('.progress-step').forEach((step, index) => {
+        const stepNumber = index + 1;
+        step.classList.remove('active', 'completed');
+
+        if (stepNumber < currentStep) {
+          step.classList.add('completed');
+        } else if (stepNumber === currentStep) {
+          step.classList.add('active');
+        }
+      });
+
+      
+      document.querySelectorAll('.form-step').forEach((step, index) => {
+        const stepNumber = index + 1;
+        step.classList.remove('active');
+
+        if (stepNumber === currentStep) {
+          step.classList.add('active');
+        }
+      });
+
+      
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const submitBtn = document.getElementById('submitBtn');
+
+      prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+      nextBtn.style.display = currentStep < totalSteps ? 'block' : 'none';
+      submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+
+      
+      if (currentStep === 2) {
+        nextBtn.innerHTML = '<i class="fas fa-camera"></i> Continuer';
+      } else {
+        nextBtn.innerHTML = 'Suivant <i class="fas fa-arrow-right"></i>';
+      }
+    }
+
+    
+    function validateCurrentStep() {
+      if (currentStep === 1) {
+        return validatePersonalInfo();
+      } else if (currentStep === 2) {
+        return validatePhoto();
+      }
+      return true;
+    }
+
+    
+    function validatePersonalInfo() {
+      const requiredFields = ['firstname', 'lastname', 'email', 'password'];
+      let isValid = true;
+
+      requiredFields.forEach(fieldName => {
+        const field = document.querySelector(`input[name="${fieldName}"]`);
+        if (!field.value.trim()) {
+          showFieldError(field, 'Ce champ est obligatoire');
+          isValid = false;
+        }
+      });
+
+      
+      const emailField = document.querySelector('input[name="email"]');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailField.value && !emailRegex.test(emailField.value)) {
+        showFieldError(emailField, 'Format d\'email invalide');
+        isValid = false;
+      }
+
+      
+      const passwordField = document.querySelector('input[name="password"]');
+      const confirmField = document.getElementById('confirmPassword');
+      if (passwordField.value !== confirmField.value) {
+        showFieldError(confirmField, 'Les mots de passe ne correspondent pas');
+        isValid = false;
+      }
+
+      if (!isValid) {
+        showNotification('Veuillez corriger les erreurs avant de continuer', 'error');
+      }
+
+      return isValid;
+    }
+
+    
+    function validatePhoto() {
+      if (!photoTaken) {
+        showNotification('Veuillez capturer votre photo avant de continuer', 'warning');
+        return false;
+      }
+      return true;
+    }
+
+    
+    function initializeCamera() {
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          facingMode: 'user'
+        }
+      })
+      .then(stream => {
+        cameraStream = stream;
+        video.srcObject = stream;
+        document.getElementById('cameraSection').classList.add('active');
+      })
+      .catch(error => {
+        console.error('Camera error:', error);
+        showNotification('Impossible d\'accéder à la caméra. Vérifiez les permissions.', 'error');
+      });
+    }
+
+    
+    function capturePhoto() {
+      if (!video.videoWidth || !video.videoHeight) {
+        showNotification('Caméra non prête, veuillez patienter', 'warning');
+        return;
+      }
+
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      
+      const imageData = canvas.toDataURL('image/jpeg', 0.8);
+      imageDataInput.value = imageData;
+
+      
+      capturedPhoto.src = imageData;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('retakeBtn').style.display = 'inline-block';
+
+      photoTaken = true;
+      showNotification('Photo capturée avec succès !', 'success');
+    }
+
+    
+    function retakePhoto() {
+      document.getElementById('photoPreview').style.display = 'none';
+      document.getElementById('retakeBtn').style.display = 'none';
+      imageDataInput.value = '';
+      photoTaken = false;
+    }
+
+    
+    function updateSummary() {
+      const formData = new FormData(form);
+      const summaryInfo = document.getElementById('summaryInfo');
+      const summaryPhoto = document.getElementById('summaryPhoto');
+
+      
+      summaryInfo.innerHTML = `
+        <h6><strong>Informations personnelles :</strong></h6>
+        <p><strong>Nom :</strong> ${formData.get('firstname')} ${formData.get('lastname')}</p>
+        <p><strong>Email :</strong> ${formData.get('email')}</p>
+        <p><strong>Téléphone :</strong> ${formData.get('phone') || 'Non renseigné'}</p>
+        <p><strong>Adresse :</strong> ${formData.get('address') || 'Non renseignée'}</p>
+      `;
+
+      
+      if (photoTaken) {
+        summaryPhoto.innerHTML = `
+          <h6><strong>Photo de profil :</strong></h6>
+          <img src="${capturedPhoto.src}" alt="Photo de profil" style="max-width: 150px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        `;
+      }
+    }
+
+    
+    function enhanceFormValidation() {
+      const inputs = form.querySelectorAll('input[required]');
+
+      inputs.forEach(input => {
+        input.addEventListener('blur', validateInput);
+        input.addEventListener('input', clearValidation);
+      });
+
+      
+      const confirmPassword = document.getElementById('confirmPassword');
+      confirmPassword.addEventListener('input', validatePasswordConfirmation);
+    }
+
+    
+    function validateInput(event) {
+      const input = event.target;
+      const value = input.value.trim();
+      let isValid = true;
+      let message = '';
+
+      clearValidation(event);
+
+      if (input.hasAttribute('required') && !value) {
+        isValid = false;
+        message = 'Ce champ est obligatoire';
+      } else if (input.type === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          isValid = false;
+          message = 'Format d\'email invalide';
+        }
+      } else if (input.type === 'password' && value) {
+        if (value.length < 8) {
+          isValid = false;
+          message = 'Mot de passe trop court (min. 8 caractères)';
+        }
+      }
+
+      if (!isValid) {
+        input.classList.add('is-invalid');
+        showFieldError(input, message);
+      } else if (value) {
+        input.classList.add('is-valid');
+      }
+
+      return isValid;
+    }
+
+    
+    function validatePasswordConfirmation() {
+      const password = document.querySelector('input[name="password"]').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      const confirmField = document.getElementById('confirmPassword');
+
+      clearValidation({ target: confirmField });
+
+      if (confirm && password !== confirm) {
+        confirmField.classList.add('is-invalid');
+        showFieldError(confirmField, 'Les mots de passe ne correspondent pas');
+      } else if (confirm) {
+        confirmField.classList.add('is-valid');
+      }
+    }
+
+    
+    function clearValidation(event) {
+      const input = event.target;
+      input.classList.remove('is-invalid', 'is-valid');
+      const errorElement = input.parentNode.parentNode.querySelector('.invalid-feedback');
+      if (errorElement) {
+        errorElement.remove();
+      }
+    }
+
+    
+    function showFieldError(input, message) {
+      const formGroup = input.parentNode.parentNode;
+      const errorElement = document.createElement('div');
+      errorElement.className = 'invalid-feedback';
+      errorElement.textContent = message;
+      formGroup.appendChild(errorElement);
+    }
+
+    
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `alert alert-${type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'success'} animate__animated animate__fadeInDown`;
+      notification.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation-circle' : 'check-circle'}"></i> ${message}`;
+
+      const cardBody = document.querySelector('.card-body');
+      cardBody.insertBefore(notification, cardBody.firstChild);
+
+      setTimeout(() => {
+        notification.classList.add('animate__fadeOutUp');
+        setTimeout(() => notification.remove(), 500);
+      }, 3000);
+    }
+
+    
+    form.addEventListener('submit', function(e) {
+      if (!validateCurrentStep()) {
+        e.preventDefault();
+        return;
+      }
+
+      
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création du compte...';
+      submitBtn.disabled = true;
+    });
+
+    
+    window.addEventListener('beforeunload', function() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+      }
+    });
+
+    
+    window.changeStep = changeStep;
+    window.capturePhoto = capturePhoto;
+    window.retakePhoto = retakePhoto;
+  </script>
+
+  
+  <footer class="modern-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="{% static 'images/bg-login1.png' %}" alt="FaceAuth Logo" class="footer-logo-img">
+          <span class="footer-brand">SFMtechnologies</span>
+        </div>
+        <p class="footer-description">
+          Créez votre compte sécurisé avec notre technologie de reconnaissance faciale avancée
+        </p>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Sécurité</h4>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-shield-alt"></i> Chiffrement AES-256</a></li>
+          <li><a href="#"><i class="fas fa-user-lock"></i> Authentification 2FA</a></li>
+          <li><a href="#"><i class="fas fa-eye-slash"></i> Confidentialité</a></li>
+          <li><a href="#"><i class="fas fa-certificate"></i> Certification ISO</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Aide</h4>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-question-circle"></i> Guide d'inscription</a></li>
+          <li><a href="#"><i class="fas fa-video"></i> Tutoriels</a></li>
+          <li><a href="#"><i class="fas fa-headset"></i> Support 24/7</a></li>
+          <li><a href="#"><i class="fas fa-comments"></i> FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4 class="footer-title">Contact</h4>
+        <div class="footer-social">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        </div>
+        <div class="footer-contact">
+          <p><i class="fas fa-envelope"></i> support@SFMtechnologies.com</p>
+          <p><i class="fas fa-phone"></i> +216 26 995 933 </p>
+          <p><i class="fas fa-map-marker-alt"></i> ariana, tunis </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>&copy; 2024 SFMtechnologies. Tous droits réservés.</p>
+        <div class="footer-bottom-links">
+          <a href="#">CGU</a>
+          <a href="#">Confidentialité</a>
+          <a href="#">RGPD</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

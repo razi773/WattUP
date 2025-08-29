@@ -1,0 +1,567 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Détection d'Anomalies - Energy AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Détection d'anomalies dans la consommation énergétique">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/dist/css/adminlte.min.css' %}">
+
+  <!-- Custom Styles -->
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --shadow-soft: 0 2px 25px rgba(0,0,0,0.1);
+      --shadow-hover: 0 5px 35px rgba(0,0,0,0.15);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    .card {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      overflow: hidden;
+      background: white;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      border-bottom: none;
+      padding: 20px;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* Anomaly Cards */
+    .anomaly-card {
+      margin-bottom: 15px;
+      border-left: 4px solid #dc3545;
+      transition: var(--transition);
+    }
+
+    .anomaly-card:hover {
+      border-left-color: #c82333;
+      transform: translateX(5px);
+    }
+
+    .anomaly-card.high-severity {
+      border-left-color: #dc3545;
+      background: linear-gradient(90deg, rgba(220, 53, 69, 0.05) 0%, transparent 100%);
+    }
+
+    .anomaly-card.medium-severity {
+      border-left-color: #fd7e14;
+      background: linear-gradient(90deg, rgba(253, 126, 20, 0.05) 0%, transparent 100%);
+    }
+
+    /* Stats Cards */
+    .stats-card {
+      text-align: center;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .stats-card .stats-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .stats-card .stats-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stats-card .stats-label {
+      color: #6c757d;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stats-card.danger {
+      background: var(--danger-gradient);
+      color: white;
+    }
+
+    .stats-card.warning {
+      background: var(--warning-gradient);
+      color: white;
+    }
+
+    .stats-card.info {
+      background: var(--info-gradient);
+      color: white;
+    }
+
+    .stats-card.success {
+      background: var(--success-gradient);
+      color: white;
+    }
+
+    /* Badges */
+    .severity-badge {
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .severity-high {
+      background: #dc3545;
+      color: white;
+    }
+
+    .severity-medium {
+      background: #fd7e14;
+      color: white;
+    }
+
+    /* Table Styles */
+    .table-anomalies {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .table-anomalies th {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    .table-anomalies td {
+      vertical-align: middle;
+      border-color: #eee;
+    }
+
+    /* Alert Styles */
+    .alert-custom {
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .alert-danger-custom {
+      background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+      border-left: 4px solid #dc3545;
+      color: #721c24;
+    }
+
+    /* Sidebar Styles */
+    .main-sidebar {
+      background: linear-gradient(180deg, #343a40 0%, #495057 100%);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-sidebar .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      margin: 2px 10px;
+      transition: var(--transition);
+    }
+
+    .nav-sidebar .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .nav-sidebar .nav-link.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
+
+    /* Button Styles */
+    .btn-refresh {
+      background: var(--success-gradient);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .btn-refresh:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+      color: white;
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .stats-card .stats-number {
+        font-size: 2rem;
+      }
+      
+      .stats-card .stats-icon {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+            <i class="fas fa-bars"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="/auth/dashboard/" class="nav-link">Accueil</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fas fa-user-circle"></i>
+            {{ username }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <a href="/auth/profile/edit/" class="dropdown-item">
+              <i class="fas fa-user-edit mr-2"></i> Modifier Profil
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="/auth/logout/" class="dropdown-item">
+              <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+            </a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <a href="/auth/dashboard/" class="brand-link text-center">
+        <span class="brand-text font-weight-light">⚡SFM Technologies</span>
+      </a>
+
+      <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex flex-column align-items-center">
+          <div class="image">
+            <img src="{{ photo_url }}" class="img-circle elevation-2" alt="Photo de profil" width="60" height="60">
+          </div>
+          <div class="info text-white mt-2">
+            <strong>{{ username }}</strong><br>
+            <small class="text-muted">Analyste Énergie</small>
+          </div>
+        </div>
+
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <a href="/auth/dashboard/" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/analyse-csv/" class="nav-link">
+                <i class="nav-icon fas fa-upload"></i>
+                <p>Uploader des données</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/auth/predict-xgb-page/" class="nav-link">
+                <i class="nav-icon fas fa-bolt"></i>
+                <p>Prédictions</p>
+                <span class="badge badge-warning right">AI</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/auth/anomaly-detect/" class="nav-link active">
+                <i class="nav-icon fas fa-exclamation-triangle"></i>
+                <p>Anomaly Detect</p>
+                <span class="badge badge-danger right">🔍</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/auth/profile/edit/" class="nav-link">
+                <i class="nav-icon fas fa-user-edit"></i>
+                <p>Modifier Profil</p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Content Header -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">
+                <i class="fas fa-exclamation-triangle text-danger"></i>
+                Détection d'Anomalies
+              </h1>
+              <p class="text-muted">Analyse et détection des consommations anormales</p>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="/auth/dashboard/">Accueil</a></li>
+                <li class="breadcrumb-item active">Anomalies</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+
+          <!-- Error Message -->
+          {% if error %}
+          <div class="alert alert-danger-custom alert-custom">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            {{ error }}
+          </div>
+          {% endif %}
+
+          <!-- Statistics Row -->
+          {% if anomalies and stats.total_anomalies > 0 %}
+          <div class="row">
+            <div class="col-lg-3 col-md-6">
+              <div class="card stats-card danger">
+                <div class="stats-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stats-number">{{ stats.total_anomalies }}</div>
+                <div class="stats-label">Total Anomalies</div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="card stats-card warning">
+                <div class="stats-icon">
+                  <i class="fas fa-fire"></i>
+                </div>
+                <div class="stats-number">{{ stats.high_severity }}</div>
+                <div class="stats-label">Haute Sévérité</div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="card stats-card info">
+                <div class="stats-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stats-number">{{ stats.mean_consumption }}</div>
+                <div class="stats-label">Consommation Moyenne</div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="card stats-card success">
+                <div class="stats-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="stats-number">{{ stats.threshold }}</div>
+                <div class="stats-label">Seuil d'Anomalie</div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body text-center py-5">
+                  <div class="mb-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                  </div>
+                  <h3 class="text-success mb-3">Système Énergétique Normal</h3>
+                  <p class="text-muted mb-4">Aucune anomalie détectée dans la consommation énergétique récente.</p>
+                  <button type="button" class="btn btn-refresh" onclick="refreshData()">
+                    <i class="fas fa-sync-alt mr-2"></i> Actualiser l'Analyse
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Anomalies Table -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-list mr-2"></i>
+                    Liste des Anomalies Récentes
+                  </h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  {% if anomalies %}
+                  <table class="table table-striped table-anomalies">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Consommation (kWh)</th>
+                        <th>Seuil</th>
+                        <th>Déviation (%)</th>
+                        <th>Sévérité</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for anomaly in anomalies %}
+                      <tr class="anomaly-card {% if anomaly.severity == 'High' %}high-severity{% else %}medium-severity{% endif %}">
+                        <td>
+                          <strong>{{ anomaly.date }}</strong>
+                        </td>
+                        <td>
+                          <span class="text-danger font-weight-bold">{{ anomaly.value }} kWh</span>
+                        </td>
+                        <td>
+                          <span class="text-muted">{{ anomaly.threshold }} kWh</span>
+                        </td>
+                        <td>
+                          <span class="text-warning font-weight-bold">+{{ anomaly.deviation_percent }}%</span>
+                        </td>
+                        <td>
+                          <span class="severity-badge {% if anomaly.severity == 'High' %}severity-high{% else %}severity-medium{% endif %}">
+                            {% if anomaly.severity == 'High' %}
+                              <i class="fas fa-fire mr-1"></i> Haute
+                            {% else %}
+                              <i class="fas fa-exclamation mr-1"></i> Moyenne
+                            {% endif %}
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-info" onclick="analyzeAnomaly('{{ anomaly.date }}')">
+                            <i class="fas fa-search"></i> Analyser
+                          </button>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  {% else %}
+                  <div class="text-center p-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    <h4 class="mt-3">Aucune Anomalie Détectée</h4>
+                    <p class="text-muted">Votre consommation énergétique semble normale.</p>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <strong>Copyright &copy; 2025 <a href="#">SFM Technologies</a>.</strong>
+      Tous droits réservés.
+      <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 1.0.0
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{% static 'AdminLTE-3.2.0/plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'AdminLTE-3.2.0/dist/js/adminlte.min.js' %}"></script>
+
+  <script>
+    // Refresh data function
+    function refreshData() {
+      const btn = document.querySelector('.btn-refresh');
+      if (btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="loading-spinner"></span> Actualisation...';
+        btn.disabled = true;
+
+        // Fetch fresh data via API
+        fetch('/auth/api/anomalies/')
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              console.log('Données d\'anomalies récupérées:', data);
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
+            } else {
+              console.error('Erreur API:', data.message);
+              location.reload();
+            }
+          })
+          .catch(error => {
+            console.error('Erreur réseau:', error);
+            location.reload();
+          });
+      }
+    }
+
+    // Analyze anomaly function
+    function analyzeAnomaly(date) {
+      alert(`Analyse détaillée pour la date: ${date}\n\nCette fonctionnalité sera bientôt disponible.`);
+    }
+
+    // Auto-refresh every 5 minutes
+    setInterval(() => {
+      console.log('Auto-refresh des données d\'anomalies...');
+      // Uncomment for auto-refresh: location.reload();
+    }, 300000);
+  </script>
+</body>
+</html>

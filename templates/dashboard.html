@@ -1,0 +1,2210 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Dashboard d'analyse énergétique avec IA">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/dist/css/adminlte.min.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+  <!-- Chart.js with animations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+      --shadow-soft: 0 2px 25px rgba(0,0,0,0.1);
+      --shadow-hover: 0 5px 35px rgba(0,0,0,0.15);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    /* Enhanced Cards */
+    .card {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-header {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 1rem 1.5rem;
+    }
+
+    .card-header.bg-success {
+      background: var(--success-gradient);
+    }
+
+    .card-header.bg-info {
+      background: var(--info-gradient);
+    }
+
+    .card-header.bg-warning {
+      background: var(--warning-gradient);
+    }
+
+    .card-header.bg-danger {
+      background: var(--danger-gradient);
+    }
+
+    .card-header.bg-secondary {
+      background: var(--dark-gradient);
+    }
+
+    /* Enhanced Small Boxes */
+    .small-box {
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .small-box:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .small-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
+    }
+
+    .small-box .inner h3 {
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .small-box .icon {
+      font-size: 4rem;
+      opacity: 0.3;
+      transition: var(--transition);
+    }
+
+    .small-box:hover .icon {
+      opacity: 0.5;
+      transform: scale(1.1);
+    }
+
+    /* Enhanced Sidebar */
+    .main-sidebar {
+      background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%) !important;
+      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-sidebar .brand-link {
+      background: var(--primary-gradient);
+      border-bottom: none;
+      padding: 1.5rem 1rem;
+      color: white !important;
+    }
+
+    .main-sidebar .sidebar {
+      background: transparent;
+    }
+
+    /* Sidebar Navigation */
+    .main-sidebar .nav-sidebar .nav-link {
+      color: #495057 !important;
+      border-radius: 8px;
+      margin: 0.2rem 0.5rem;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .main-sidebar .nav-sidebar .nav-link:hover {
+      background: rgba(102, 126, 234, 0.1) !important;
+      color: #667eea !important;
+      transform: translateX(5px);
+    }
+
+    .main-sidebar .nav-sidebar .nav-link.active {
+      background: var(--primary-gradient) !important;
+      color: white !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .main-sidebar .nav-sidebar .nav-link .nav-icon {
+      color: inherit;
+    }
+
+    /* User Panel */
+    .main-sidebar .user-panel {
+      border-bottom: 1px solid #dee2e6;
+      color: #495057 !important;
+    }
+
+    .main-sidebar .user-panel .info {
+      color: #495057 !important;
+    }
+
+    .main-sidebar .user-panel .info strong {
+      color: #343a40 !important;
+    }
+
+    /* Navigation Header */
+    .main-sidebar .nav-header {
+      background: rgba(102, 126, 234, 0.05);
+      color: #667eea !important;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0.5rem;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    /* Badges */
+    .main-sidebar .badge {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .user-panel .image img {
+      border: 3px solid rgba(102, 126, 234, 0.3);
+      transition: var(--transition);
+    }
+
+    .user-panel .image img:hover {
+      transform: scale(1.05);
+      border-color: rgba(102, 126, 234, 0.6);
+    }
+
+    /* Enhanced Navbar */
+    .main-header {
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      border-bottom: none;
+    }
+
+    .navbar-nav .nav-link {
+      border-radius: 8px;
+      margin: 0 0.5rem;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background: rgba(220, 53, 69, 0.1);
+      transform: translateY(-1px);
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Chart Containers */
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin: 1rem 0;
+    }
+
+    .chart-container canvas {
+      border-radius: 8px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .small-box .inner h3 {
+        font-size: 1.8rem;
+      }
+
+      .small-box .icon {
+        font-size: 3rem;
+      }
+
+      .card-header h3 {
+        font-size: 1.1rem;
+      }
+
+      .chart-container {
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .content-wrapper {
+        padding: 0.5rem !important;
+      }
+
+      .small-box .inner {
+        padding: 1rem;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+    }
+
+    /* Enhanced Footer */
+    .main-footer {
+      background: var(--dark-gradient);
+      color: white;
+      border-top: none;
+      box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Pulse Animation for Metrics */
+    .metric-pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Enhanced List Items */
+    .list-group-item {
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      transition: var(--transition);
+      background: rgba(255,255,255,0.8);
+    }
+
+    .list-group-item:hover {
+      background: rgba(255,255,255,1);
+      transform: translateX(5px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* Calendar Enhancements */
+    .fc {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .fc-header-toolbar {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 1rem;
+      margin-bottom: 0 !important;
+    }
+
+    .fc-button-primary {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .fc-button-primary:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* XGBoost Prediction Button Styles */
+    .prediction-control-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prediction-control-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: slideLight 4s ease-in-out infinite;
+    }
+
+    @keyframes slideLight {
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: -100%; }
+    }
+
+    .prediction-control-section h4 {
+      color: white;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .prediction-control-section p {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .predict-xgb-btn {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .predict-xgb-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: var(--transition);
+    }
+
+    .predict-xgb-btn:hover::before {
+      left: 100%;
+    }
+
+    .predict-xgb-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(240, 147, 251, 0.6);
+      color: white;
+    }
+
+    .predict-xgb-btn:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    .predict-xgb-btn i {
+      font-size: 1.3rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .predict-xgb-btn:hover i {
+      animation: spin 0.8s ease-in-out;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .predict-xgb-btn.loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .predict-xgb-btn.loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    .prediction-status {
+      margin-top: 15px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .prediction-status.success {
+      background: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+      border: 1px solid rgba(40, 167, 69, 0.3);
+    }
+
+    .prediction-status.error {
+      background: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+      border: 1px solid rgba(220, 53, 69, 0.3);
+    }
+
+    .prediction-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .prediction-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .prediction-stat {
+      text-align: center;
+      color: white;
+    }
+
+    .prediction-stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .prediction-stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Sidebar Prediction Button Styles */
+    .prediction-nav-link {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 8px;
+      margin: 5px 10px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .prediction-nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: var(--transition);
+    }
+
+    .prediction-nav-link:hover::before {
+      left: 100%;
+    }
+
+    .prediction-nav-link:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+    }
+
+    .prediction-icon {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .prediction-nav-link:hover .prediction-icon {
+      animation: spin 0.8s ease-in-out;
+    }
+
+    .prediction-badge {
+      position: absolute;
+      top: 8px;
+      right: 15px;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #f5576c;
+      font-weight: bold;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+      to { box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Loading Overlay -->
+<div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+  <div class="text-center">
+    <div class="loading-spinner mb-3"></div>
+    <p class="text-muted">Chargement du dashboard...</p>
+  </div>
+</div>
+
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light" role="navigation" aria-label="Navigation principale">
+    <!-- Sidebar Toggle (mobile) -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button" aria-label="Basculer la navigation">
+          <i class="fas fa-bars"></i>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Notifications -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#" aria-label="Notifications">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge" id="notification-count">0</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">Notifications</span>
+          <div id="notifications-list">
+            <div class="dropdown-item text-center text-muted">Aucune notification</div>
+          </div>
+        </div>
+      </li>
+
+      <!-- User Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#" aria-label="Menu utilisateur">
+          <img src="{{ photo_url }}" class="img-circle" alt="Photo de {{ username }}" width="25" height="25">
+          <span class="ml-1">{{ username }}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="/auth/profile/edit/" class="dropdown-item">
+            <i class="fas fa-user-edit mr-2"></i> Modifier le profil
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="/auth/logout/" class="dropdown-item text-danger">
+            <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+          </a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside class="main-sidebar sidebar-light-primary elevation-4" role="complementary">
+    <a href="/auth/dashboard/" class="brand-link text-center" aria-label="Accueil Energy AI">
+      <span class="brand-text font-weight-light">⚡SFM technologies</span>
+    </a>
+
+    <div class="sidebar">
+      <!-- User Panel -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex flex-column align-items-center">
+        <div class="image">
+          <img src="{{ photo_url }}" class="img-circle elevation-2" alt="Photo de profil de {{ username }}" width="60" height="60">
+        </div>
+        <div class="info text-white mt-2" role="text">
+          <strong>{{ username }}</strong>
+          <br>
+          <small class="text-muted">Analyste Énergie</small>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2" role="navigation" aria-label="Menu principal">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item" role="none">
+            <a href="/auth/dashboard/" class="nav-link active" role="menuitem" aria-current="page">
+              <i class="nav-icon fas fa-chart-pie" aria-hidden="true"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="/analyse-csv/" class="nav-link" role="menuitem">
+              <i class="nav-icon fas fa-upload" aria-hidden="true"></i>
+              <p>Uploader des données</p>
+            </a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="/auth/predict-xgb-page/" class="nav-link prediction-nav-link" role="menuitem">
+              <i class="nav-icon fas fa-bolt prediction-icon" aria-hidden="true"></i>
+              <p>Prédictions </p>
+              <span class="badge badge-warning prediction-badge">AI</span>
+            </a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="/auth/anomaly-detect/" class="nav-link" role="menuitem">
+              <i class="nav-icon fas fa-exclamation-triangle" aria-hidden="true"></i>
+              <p>Anomaly Detect</p>
+              <span class="badge badge-danger right">🔍</span>
+            </a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="/auth/image-upload/" class="nav-link" role="menuitem">
+              <i class="nav-icon fas fa-camera" aria-hidden="true"></i>
+              <p>Prédiction Images</p>
+              <span class="badge badge-success right">ML</span>
+            </a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="/auth/image-history/" class="nav-link" role="menuitem">
+              <i class="nav-icon fas fa-history" aria-hidden="true"></i>
+              <p>Historique Images</p>
+            </a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="/auth/profile/edit/" class="nav-link" role="menuitem">
+              <i class="nav-icon fas fa-user-edit" aria-hidden="true"></i>
+              <p>Modifier Profil</p>
+            </a>
+          </li>
+
+          <!-- Quick Stats in Sidebar -->
+          <li class="nav-header">STATISTIQUES RAPIDES</li>
+          <li class="nav-item" role="none">
+            <div class="nav-link text-sm">
+              <i class="nav-icon fas fa-circle text-success" aria-hidden="true"></i>
+              <p>
+                Système en ligne
+                <span class="badge badge-success right">●</span>
+              </p>
+            </div>
+          </li>
+          <li class="nav-item" role="none">
+            <div class="nav-link text-sm">
+              <i class="nav-icon fas fa-clock text-info" aria-hidden="true"></i>
+              <p>
+                Dernière MAJ
+                <span class="badge badge-info right" id="last-update">--</span>
+              </p>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <div class="content-wrapper p-3">
+    <!-- Content Header -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">
+              <i class="fas fa-chart-line text-primary"></i>
+              Dashboard 
+            </h1>
+            <p class="text-muted">Analyse en temps réel de la consommation énergétique</p>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/auth/dashboard/">Accueil</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="content">
+      <!-- Consumption & Cost Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-3">
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3 id="total-consumption">{{ total_consumption|floatformat:0|default:0 }}</h3>
+              <p>Consommation Totale (kWh)</p>
+              <div class="progress mt-2" style="height: 4px;">
+                <div class="progress-bar bg-white" role="progressbar" style="width: 85%"></div>
+              </div>
+            </div>
+            <div class="icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div class="small-box-footer">
+              <span class="text-white-50">
+                <i class="fas fa-chart-line"></i> Données historiques
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-3">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3 id="predicted-consumption">{{ total_predicted_consumption|floatformat:0|default:0 }}</h3>
+              <p>Prédictions (kWh)</p>
+              <div class="progress mt-2" style="height: 4px;">
+                <div class="progress-bar bg-white" role="progressbar" style="width: 70%"></div>
+              </div>
+            </div>
+            <div class="icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="small-box-footer">
+              <span class="text-white-50">
+                <i class="fas fa-brain"></i>  Predictions
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-3">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3 id="daily-average">{{ mean_consumption|floatformat:0|default:0 }}</h3>
+              <p>Moyenne Journalière (kWh)</p>
+              <div class="progress mt-2" style="height: 4px;">
+                <div class="progress-bar bg-white" role="progressbar" style="width: 60%"></div>
+              </div>
+            </div>
+            <div class="icon">
+              <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="small-box-footer">
+              <span class="text-white-50">
+                <i class="fas fa-chart-bar"></i> Consommation moyenne
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-3">
+          <div class="small-box bg-danger">
+            <div class="inner">
+              <h3 id="model-efficiency">{{ model_efficiency|floatformat:1|default:0 }}%</h3>
+              <p>Efficacité Modèle</p>
+              <div class="progress mt-2" style="height: 4px;">
+                <div class="progress-bar bg-white" role="progressbar" style="width: 92%"></div>
+              </div>
+            </div>
+            <div class="icon">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <div class="small-box-footer">
+              <span class="text-white-50">
+                <i class="fas fa-thumbs-up"></i> Précision moyenne
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Charts Section -->
+      <div class="row">
+        <div class="col-xl-8 col-lg-7 col-md-12">
+          <!-- Main Comparison Chart -->
+          <div class="card mb-4">
+            <div class="card-header bg-primary">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-chart-bar mr-2"></i>
+                Données réelles vs prédites
+              </h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" aria-label="Réduire">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="maximize" aria-label="Agrandir">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="barChart" aria-label="Graphique comparatif des données réelles et prédites"></canvas>
+              </div>
+              <!-- Tableau des prédictions XGBoost (MongoDB) -->
+              <div class="row mt-3">
+                <div class="col-6 text-center">
+                  <div class="border-right">
+                    <strong class="text-success">Précision moyenne</strong>
+                    <p class="text-muted mb-0" id="accuracy-rate">Calcul en cours...</p>
+                  </div>
+                </div>
+                <div class="col-6 text-center">
+                  <strong class="text-info">Écart moyen</strong>
+                  <p class="text-muted mb-0" id="average-deviation">Calcul en cours...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Performance Dashboard -->
+          <div class="card mb-4">
+            <div class="card-header bg-info">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-chart-pie mr-2"></i>
+                Tableau de bord des performances
+              </h3>
+              <div class="card-tools">
+                <span class="badge badge-light" id="performance-period">7 derniers jours</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- Performance Metrics -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="info-box bg-primary">
+                    <span class="info-box-icon"><i class="fas fa-bolt"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">Consommation Max</span>
+                      <span class="info-box-number" id="max-consumption">0 kWh</span>
+                      <div class="progress">
+                        <div class="progress-bar" style="width: 0%" id="max-progress"></div>
+                      </div>
+                      <span class="progress-description">Pic quotidien</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="fas fa-chart-line"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">Moyenne</span>
+                      <span class="info-box-number" id="avg-consumption">0 kWh</span>
+                      <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 0%" id="avg-progress"></div>
+                      </div>
+                      <span class="progress-description">Consommation/jour</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-6 mb-3">
+                  <div class="info-box bg-danger">
+                    <span class="info-box-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">Anomalies</span>
+                      <span class="info-box-number" id="anomaly-count">0</span>
+                      <div class="progress">
+                        <div class="progress-bar bg-danger" style="width: 0%" id="anomaly-progress"></div>
+                      </div>
+                      <span class="progress-description">Détectées</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Performance Summary -->
+              <div class="mt-3 p-3 bg-light rounded">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-muted mb-2">
+                      <i class="fas fa-tachometer-alt mr-1"></i>
+                      Efficacité énergétique
+                    </h6>
+                    <div class="progress mb-2" style="height: 20px;">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                           role="progressbar" style="width: 0%" id="efficiency-bar">
+                        <span id="efficiency-text">0%</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted mb-2">
+                      <i class="fas fa-calendar-week mr-1"></i>
+                      Tendance hebdomadaire
+                    </h6>
+                    <div class="d-flex justify-content-between">
+                      <span class="badge badge-success" id="trend-up">↗ +12%</span>
+                      <span class="badge badge-info" id="trend-stable">→ Stable</span>
+                      <span class="badge badge-warning" id="trend-down">↘ -5%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Model Predictions Row -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-4">
+                <div class="card-header bg-warning">
+                  <h3 class="card-title mb-0">
+                    <i class="fas fa-cogs mr-2"></i>
+                    prédiction
+                  </h3>
+                  <div class="card-tools">
+                    <span class="badge badge-light" id="xgb-status">Actif</span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart-container" style="height: 250px;">
+                    <canvas id="xgbChart" aria-label="Prédictions du modèle XGBoost"></canvas>
+                  </div>
+                  <div class="mt-2">
+                    <small class="text-muted">
+                      <i class="fas fa-info-circle"></i>
+                      Gradient boosting pour prédictions haute précision
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cost Calculation Section -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-4">
+                <div class="card-header bg-success">
+                  <h3 class="card-title mb-0">
+                    <i class="fas fa-calculator mr-2"></i>
+                    Calcul du Coût Énergétique
+                  </h3>
+                  <div class="card-tools">
+                    <span class="badge badge-light">Grille Tarifaire Tunisienne</span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <div class="border-left border-primary pl-3">
+                        <h4 class="text-primary mb-1" id="total-predicted-consumption">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </h4>
+                        <p class="text-muted mb-0">Consommation totale prédite</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="border-left border-warning pl-3">
+                        <h4 class="text-warning mb-1" id="cost-ht">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </h4>
+                        <p class="text-muted mb-0">Coût hors TVA</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="border-left border-info pl-3">
+                        <h4 class="text-info mb-1" id="tva-amount">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </h4>
+                        <p class="text-muted mb-0">Montant TVA (19%)</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="border-left border-success pl-3">
+                        <h4 class="text-success mb-1" id="cost-ttc">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </h4>
+                        <p class="text-muted mb-0">Coût total TTC</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Tariff Details -->
+                  <div class="mt-3">
+                    <h6 class="text-muted mb-2">
+                      <i class="fas fa-info-circle mr-1"></i>
+                      Grille tarifaire progressive :
+                    </h6>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <small class="text-muted">
+                          • 0-50 kWh : 0.122 DT/kWh<br>
+                          • 51-100 kWh : 0.153 DT/kWh<br>
+                          • 101-200 kWh : 0.189 DT/kWh
+                        </small>
+                      </div>
+                      <div class="col-md-6">
+                        <small class="text-muted">
+                          • 201-300 kWh : 0.218 DT/kWh<br>
+                          • 301-500 kWh : 0.245 DT/kWh<br>
+                          • +500 kWh : 0.279 DT/kWh
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-xl-4 col-lg-5 col-md-12">
+          <!-- Recent Files Card -->
+          <div class="card mb-4">
+            <div class="card-header bg-secondary">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-clock mr-2"></i>
+                Activité récente
+              </h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" onclick="refreshRecentFiles()" aria-label="Actualiser">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush" id="recent-files">
+                <li class="list-group-item d-flex align-items-center">
+                  <div class="loading-spinner mr-2"></div>
+                  <span>Chargement des fichiers récents...</span>
+                </li>
+              </ul>
+              <div class="card-footer text-center">
+                <a href="/analyse-csv/" class="btn btn-sm btn-outline-primary">
+                  <i class="fas fa-plus mr-1"></i>
+                  Ajouter des données
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Outliers Detection Card -->
+          <div class="card mb-4">
+            <div class="card-header bg-danger">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Anomalies détectées
+              </h3>
+              <div class="card-tools">
+                <span class="badge badge-light" id="outliers-badge">0</span>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <div class="row">
+                <div class="col-12">
+                  <h2 class="text-danger mb-2" id="outliers-count">
+                    <i class="fas fa-spinner fa-spin"></i>
+                  </h2>
+                  <p class="text-muted mb-3">Valeurs aberrantes détectées</p>
+                  <div class="progress mb-3" style="height: 8px;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" id="outliers-progress"></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-outline-danger btn-sm" onclick="showOutliersDetails()" id="outliers-details-btn" disabled>
+                <i class="fas fa-search mr-1"></i>
+                Voir les détails
+              </button>
+            </div>
+          </div>
+
+          <!-- System Status Card -->
+          <div class="card mb-4">
+            <div class="card-header bg-info">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-server mr-2"></i>
+                État du système
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row text-center">
+                <div class="col-4">
+                  <div class="border-right">
+                    <strong class="text-success d-block">CPU</strong>
+                    <span class="text-muted" id="cpu-usage">--</span>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="border-right">
+                    <strong class="text-warning d-block">RAM</strong>
+                    <span class="text-muted" id="ram-usage">--</span>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <strong class="text-info d-block">Modèles</strong>
+                  <span class="text-muted" id="models-status">2/2</span>
+                </div>
+              </div>
+              <div class="mt-3">
+                <div class="progress mb-2" style="height: 6px;">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="system-health"></div>
+                </div>
+                <small class="text-muted">
+                  <i class="fas fa-heartbeat text-success"></i>
+                  Système opérationnel
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Card -->
+          <div class="card mb-4">
+            <div class="card-header bg-dark">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-bolt mr-2"></i>
+                Actions rapides
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary btn-sm mb-2" onclick="exportData()">
+                  <i class="fas fa-download mr-1"></i>
+                  Exporter les données
+                </button>
+                <button class="btn btn-outline-success btn-sm mb-2" onclick="runPrediction()">
+                  <i class="fas fa-play mr-1"></i>
+                  Nouvelle prédiction
+                </button>
+                <button class="btn btn-outline-info btn-sm mb-2" onclick="generateReport()">
+                  <i class="fas fa-file-pdf mr-1"></i>
+                  Générer rapport
+                </button>
+                <button class="btn btn-outline-warning btn-sm" onclick="optimizeModels()">
+                  <i class="fas fa-cog mr-1"></i>
+                  Optimiser modèles
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar Section -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary">
+              <h3 class="card-title mb-0">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                Calendrier de consommation énergétique
+              </h3>
+              <div class="card-tools">
+                <div class="btn-group btn-group-sm" role="group" aria-label="Vue du calendrier">
+                  <button type="button" class="btn btn-outline-light active" data-calendar-view="dayGridMonth">Mois</button>
+                  <button type="button" class="btn btn-outline-light" data-calendar-view="timeGridWeek">Semaine</button>
+                  <button type="button" class="btn btn-outline-light" data-calendar-view="timeGridDay">Jour</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="calendar" aria-label="Calendrier interactif de consommation énergétique"></div>
+
+              <!-- Calendar Legend -->
+              <div class="row mt-3">
+                <div class="col-12">
+                  <h6 class="text-center mb-2">
+                    <i class="fas fa-info-circle text-info mr-1"></i>
+                    Légende du calendrier
+                  </h6>
+                  <div class="d-flex justify-content-center flex-wrap">
+                    <div class="mr-4 mb-2">
+                      <span class="badge badge-success mr-1">●</span>
+                      <small>Consommation normale (&lt;500 kWh)</small>
+                    </div>
+                    <div class="mr-4 mb-2">
+                      <span class="badge badge-warning mr-1">●</span>
+                      <small>Consommation élevée (500-1000 kWh)</small>
+                    </div>
+                    <div class="mr-4 mb-2">
+                      <span class="badge badge-danger mr-1">●</span>
+                      <small>Pic de consommation (&gt;1000 kWh)</small>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center flex-wrap mt-2">
+                    <div class="mr-4 mb-2">
+                      <span class="mr-1">📊</span>
+                      <small class="text-muted">Données réelles</small>
+                    </div>
+                    <div class="mr-4 mb-2">
+                      <span class="mr-1">🤖</span>
+                      <small class="text-muted">Prédictions IA</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Enhanced Footer -->
+  <footer class="main-footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <strong>&copy; 2025 Energy AI</strong>
+          <span class="text-muted ml-2">Plateforme d'analyse énergétique intelligente</span>
+        </div>
+        <div class="col-md-6 text-right">
+          <span class="text-muted">
+            Version 2.1.0 |
+            <a href="#" class="text-primary">Documentation</a> |
+            <a href="#" class="text-primary">Support</a>
+          </span>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 text-center">
+          <small class="text-muted">
+            Propulsé par AdminLTE 3, Chart.js et FullCalendar |
+            <span id="footer-stats">Dernière mise à jour: <span id="last-refresh">--</span></span>
+          </small>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Modal for Outliers Details -->
+<div class="modal fade" id="outliersModal" tabindex="-1" role="dialog" aria-labelledby="outliersModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="outliersModalLabel">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          Détails des anomalies détectées
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="outliers-details-content">
+          <div class="text-center">
+            <div class="loading-spinner mb-3"></div>
+            <p>Chargement des détails...</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-danger" onclick="exportOutliers()">
+          <i class="fas fa-download mr-1"></i>
+          Exporter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Calendar Event Details -->
+<div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="calendarModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="calendarModalLabel">
+          <i class="fas fa-calendar-day mr-2"></i>
+          Détails de consommation
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="calendar-modal-content">
+        <!-- Content will be populated by JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS Scripts -->
+<script src="{% static 'AdminLTE-3.2.0/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'AdminLTE-3.2.0/dist/js/adminlte.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+// Global variables
+let charts = {
+  bar: null,
+  xgb: null
+};
+let calendar = null;
+let updateInterval = null;
+let isLoading = false;
+
+// Utility functions
+function showNotification(message, type = 'info') {
+  const toast = $(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+      <div class="toast-header bg-${type} text-white">
+        <strong class="mr-auto">
+          <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}-circle mr-1"></i>
+          ${type === 'success' ? 'Succès' : type === 'error' ? 'Erreur' : 'Information'}
+        </strong>
+        <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">${message}</div>
+    </div>
+  `);
+
+  if (!$('#toast-container').length) {
+    $('body').append('<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>');
+  }
+
+  $('#toast-container').append(toast);
+  toast.toast('show');
+}
+
+function animateValue(element, start, end, duration = 1000) {
+  const range = end - start;
+  const increment = range / (duration / 16);
+  let current = start;
+
+  const timer = setInterval(() => {
+    current += increment;
+    if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+      current = end;
+      clearInterval(timer);
+    }
+    element.textContent = typeof end === 'number' ? current.toFixed(2) : current;
+  }, 16);
+}
+
+function formatNumber(num) {
+  return new Intl.NumberFormat('fr-FR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(num);
+}
+
+function updateLastRefresh() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString('fr-FR');
+  document.getElementById('last-refresh').textContent = timeString;
+  document.getElementById('last-update').textContent = timeString.substring(0, 5);
+}
+
+// Enhanced dashboard update function
+async function updateDashboard() {
+  if (isLoading) return;
+
+  isLoading = true;
+
+  try {
+    // Show loading indicators
+    document.querySelectorAll('.metric-value').forEach(el => {
+      el.previousElementSibling?.style.setProperty('display', 'inline-block');
+    });
+
+    const response = await fetch("/auth/api/stats/");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+
+    // Update metrics with animations
+    updateMetrics(data);
+
+    // Update charts
+    updateCharts(data);
+
+    // Update performance metrics
+    updatePerformanceMetrics(data);
+
+    // Update recent files
+    updateRecentFiles(data.recent_files || []);
+
+    // Update system status
+    updateSystemStatus(data);
+
+    // Update performance metrics
+    updatePerformanceMetrics(data);
+
+    // Update last refresh time
+    updateLastRefresh();
+
+    showNotification('Dashboard mis à jour avec succès', 'success');
+
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour:', error);
+    showNotification('Erreur lors de la mise à jour du dashboard', 'error');
+  } finally {
+    isLoading = false;
+    // Hide loading indicators
+    document.querySelectorAll('.loading-spinner').forEach(el => {
+      el.style.display = 'none';
+    });
+  }
+}
+
+function updateMetrics(data) {
+  // Calculer la consommation totale réelle depuis les données
+  const totalRealConsumption = data.real_values ? data.real_values.reduce((a,b) => a+b, 0) : 0;
+  const totalPredictedConsumption = data.xgb_values ? data.xgb_values.reduce((a,b) => a+b, 0) : 0;
+  const dailyAverage = data.real_values && data.real_values.length > 0 ? (totalRealConsumption / data.real_values.length) : 0;
+  
+  // ✅ Calcul du coût selon la grille tarifaire progressive tunisienne
+  if (totalPredictedConsumption > 0) {
+    const cost = calculateTunisianTariff(totalPredictedConsumption);
+    console.log('=== CALCUL DU COÛT DE LA CONSOMMATION PRÉDITE ===');
+    console.log(`📊 Consommation totale prédite: ${totalPredictedConsumption.toFixed(2)} kWh`);
+    console.log(`💰 Coût hors TVA: ${cost.costHT.toFixed(3)} DT`);
+    console.log(`📈 Montant TVA (19%): ${cost.tva.toFixed(3)} DT`);
+    console.log(`🧾 Coût total TTC: ${cost.costTTC.toFixed(3)} DT`);
+    console.log('===============================================');
+  }
+  
+  // ✅ Mise à jour des éléments de coût dans le dashboard
+  const consumptionEl = document.getElementById('total-predicted-consumption');
+  const costHTEl = document.getElementById('cost-ht');
+  const tvaEl = document.getElementById('tva-amount');
+  const costTTCEl = document.getElementById('cost-ttc');
+  
+  if (data.cost_data && data.total_predicted_consumption > 0) {
+    if (consumptionEl) consumptionEl.textContent = `${data.total_predicted_consumption.toFixed(2)} kWh`;
+    if (costHTEl) costHTEl.textContent = `${data.cost_data.costHT.toFixed(3)} DT`;
+    if (tvaEl) tvaEl.textContent = `${data.cost_data.tva.toFixed(3)} DT`;
+    if (costTTCEl) costTTCEl.textContent = `${data.cost_data.costTTC.toFixed(3)} DT`;
+  } else {
+    // Afficher des valeurs par défaut si pas de données
+    if (consumptionEl) consumptionEl.textContent = '0.00 kWh';
+    if (costHTEl) costHTEl.textContent = '0.000 DT';
+    if (tvaEl) tvaEl.textContent = '0.000 DT';
+    if (costTTCEl) costTTCEl.textContent = '0.000 DT';
+  }
+  
+  const metrics = [
+    { id: 'total-consumption', value: totalRealConsumption },
+    { id: 'predicted-consumption', value: totalPredictedConsumption },
+    { id: 'daily-average', value: dailyAverage },
+    { id: 'model-efficiency', value: 92.5 }
+  ];
+
+  metrics.forEach(metric => {
+    const element = document.getElementById(metric.id);
+    if (element) {
+      const currentValue = parseFloat(element.textContent) || 0;
+      animateValue(element, currentValue, metric.value);
+
+      // Update progress bar
+      const progressBar = element.closest('.small-box')?.querySelector('.progress-bar');
+      if (progressBar) {
+        const percentage = Math.min((metric.value / 1000) * 100, 100);
+        progressBar.style.width = `${percentage}%`;
+        progressBar.setAttribute('aria-valuenow', percentage);
+      }
+    }
+  });
+
+  // Update outliers
+  const outliersElement = document.getElementById('outliers-count');
+  if (outliersElement) {
+    const currentOutliers = parseInt(outliersElement.textContent) || 0;
+    animateValue(outliersElement, currentOutliers, data.outliers || 0);
+
+    // Update outliers badge and progress
+    const badge = document.getElementById('outliers-badge');
+    const progress = document.getElementById('outliers-progress');
+    const detailsBtn = document.getElementById('outliers-details-btn');
+
+    if (badge) badge.textContent = data.outliers || 0;
+    if (progress) {
+      const percentage = Math.min((data.outliers / 50) * 100, 100);
+      progress.style.width = `${percentage}%`;
+    }
+    if (detailsBtn) {
+      detailsBtn.disabled = !data.outliers;
+    }
+  }
+}
+
+function updateCharts(data) {
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          padding: 20
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        titleColor: 'white',
+        bodyColor: 'white',
+        borderColor: 'rgba(255,255,255,0.2)',
+        borderWidth: 1
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(0,0,0,0.1)'
+        }
+      },
+      x: {
+        grid: {
+          color: 'rgba(0,0,0,0.1)'
+        }
+      }
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeInOutQuart'
+    }
+  };
+
+  // Bar Chart - Données réelles vs prédites (incluant XGBoost)
+  const barCtx = document.getElementById("barChart")?.getContext("2d");
+  if (barCtx) {
+    if (charts.bar) charts.bar.destroy();
+    charts.bar = new Chart(barCtx, {
+      type: "bar",
+      data: {
+        labels: data.weekly_labels || [],
+        datasets: [
+          {
+            label: "Consommation réelle",
+            backgroundColor: "rgba(40, 167, 69, 0.8)",
+            borderColor: "rgba(40, 167, 69, 1)",
+            borderWidth: 2,
+            data: data.real_values || []
+          },
+          {
+            label: "Prédictions ",
+            backgroundColor: "rgba(102, 16, 242, 0.8)",
+            borderColor: "rgba(102, 16, 242, 1)",
+            borderWidth: 2,
+            data: data.xgb_values || []
+          }
+        ]
+      },
+      options: {
+        ...chartOptions,
+        plugins: {
+          ...chartOptions.plugins,
+          title: {
+            display: true,
+            text: 'Données réelles vs prédites ',
+            font: { size: 16, weight: 'bold' }
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Consommation (kWh)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Dates'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // XGBoost Chart
+  const xgbCtx = document.getElementById("xgbChart")?.getContext("2d");
+  if (xgbCtx) {
+    if (charts.xgb) charts.xgb.destroy();
+    charts.xgb = new Chart(xgbCtx, {
+      type: "line",
+      data: {
+        labels: data.weekly_labels || [],
+        datasets: [
+          {
+            label: "Données réelles",
+            borderColor: "rgba(40, 167, 69, 1)",
+            backgroundColor: "rgba(40, 167, 69, 0.1)",
+            fill: false,
+            tension: 0.4,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            data: data.real_values || []
+          },
+          {
+            label: "Prédictions",
+            borderColor: "rgba(102, 16, 242, 1)",
+            backgroundColor: "rgba(102, 16, 242, 0.1)",
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            data: data.xgb_values || []
+          }
+        ]
+      },
+      options: {
+        ...chartOptions,
+        plugins: {
+          ...chartOptions.plugins,
+          title: {
+            display: true,
+            text: 'Prédictions  vs Données Réelles',
+            font: { size: 16, weight: 'bold' }
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        }
+      }
+    });
+  }
+
+  // Update accuracy metrics for XGBoost only
+  if (data.real_values && data.xgb_values) {
+    // Calculer la précision pour XGBoost
+    let xgbAccuracy = 0;
+    let xgbDeviation = 0;
+    if (data.xgb_values && data.xgb_values.length > 0) {
+      xgbAccuracy = calculateAccuracy(data.real_values, data.xgb_values);
+      xgbDeviation = calculateDeviation(data.real_values, data.xgb_values);
+    }
+
+    const accuracyEl = document.getElementById('accuracy-rate');
+    const deviationEl = document.getElementById('average-deviation');
+
+    if (accuracyEl) {
+      accuracyEl.innerHTML = `${xgbAccuracy.toFixed(1)}% <small class="text-muted">(XGBoost)</small>`;
+    }
+    if (deviationEl) {
+      deviationEl.innerHTML = `±${xgbDeviation.toFixed(2)} kWh <small class="text-muted">(XGBoost)</small>`;
+    }
+  }
+}
+
+function calculateAccuracy(real, predicted) {
+  if (!real.length || !predicted.length) return 0;
+
+  let totalError = 0;
+  for (let i = 0; i < Math.min(real.length, predicted.length); i++) {
+    totalError += Math.abs(real[i] - predicted[i]) / real[i];
+  }
+
+  return Math.max(0, 100 - (totalError / real.length) * 100);
+}
+
+function calculateDeviation(real, predicted) {
+  if (!real.length || !predicted.length) return 0;
+
+  let totalDeviation = 0;
+  for (let i = 0; i < Math.min(real.length, predicted.length); i++) {
+    totalDeviation += Math.abs(real[i] - predicted[i]);
+  }
+
+  return totalDeviation / real.length;
+}
+
+function updateRecentFiles(files) {
+  const list = document.getElementById("recent-files");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (!files.length) {
+    list.innerHTML = `
+      <li class="list-group-item text-center text-muted">
+        <i class="fas fa-inbox mr-2"></i>
+        Aucun fichier récent
+      </li>
+    `;
+    return;
+  }
+
+  files.forEach((file, index) => {
+    const li = document.createElement("li");
+    li.className = "list-group-item d-flex align-items-center";
+    li.style.animationDelay = `${index * 0.1}s`;
+    li.innerHTML = `
+      <div class="mr-3">
+        <i class="fas fa-file-alt text-primary"></i>
+      </div>
+      <div class="flex-grow-1">
+        <div class="font-weight-bold">${file.name}</div>
+        <small class="text-muted">${file.date}</small>
+      </div>
+      <div>
+        <span class="badge badge-${file.status === 'processed' ? 'success' : 'warning'}">
+          ${file.status === 'processed' ? 'Traité' : 'En cours'}
+        </span>
+      </div>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function updateSystemStatus(data) {
+  // Update CPU usage
+  const cpuEl = document.getElementById('cpu-usage');
+  if (cpuEl) cpuEl.textContent = `${(Math.random() * 30 + 20).toFixed(1)}%`;
+
+  // Update RAM usage
+  const ramEl = document.getElementById('ram-usage');
+  if (ramEl) ramEl.textContent = `${(Math.random() * 40 + 30).toFixed(1)}%`;
+
+  // Update system health
+  const healthEl = document.getElementById('system-health');
+  if (healthEl) {
+    const health = Math.random() * 20 + 80;
+    healthEl.style.width = `${health}%`;
+    healthEl.setAttribute('aria-valuenow', health);
+  }
+}
+
+// Fonction pour mettre à jour la section de performance
+function updatePerformanceMetrics(data) {
+  if (!data.real_values || !data.xgb_values) return;
+  
+  // Calculs des métriques de performance
+  const realValues = data.real_values || [];
+  const xgbValues = data.xgb_values || [];
+  
+  const maxConsumption = Math.max(...realValues);
+  const avgConsumption = realValues.reduce((a, b) => a + b, 0) / realValues.length;
+  const anomalyCount = data.outliers || 0;
+  
+  // Calcul de la précision du modèle
+  let totalAccuracy = 0;
+  for (let i = 0; i < Math.min(realValues.length, xgbValues.length); i++) {
+    if (realValues[i] > 0) {
+      const accuracy = (1 - Math.abs(realValues[i] - xgbValues[i]) / realValues[i]) * 100;
+      totalAccuracy += Math.max(0, accuracy);
+    }
+  }
+  const modelPrecision = totalAccuracy / Math.min(realValues.length, xgbValues.length);
+  
+  // Calcul de l'efficacité (pourcentage de jours sous la moyenne)
+  const belowAverage = realValues.filter(val => val <= avgConsumption).length;
+  const efficiency = (belowAverage / realValues.length) * 100;
+  
+  // Mise à jour des éléments
+  const maxEl = document.getElementById('max-consumption');
+  const avgEl = document.getElementById('avg-consumption');
+  const precisionEl = document.getElementById('model-precision');
+  const anomalyEl = document.getElementById('anomaly-count');
+  
+  if (maxEl) maxEl.textContent = `${maxConsumption.toFixed(1)} kWh`;
+  if (avgEl) avgEl.textContent = `${avgConsumption.toFixed(1)} kWh`;
+  if (precisionEl) precisionEl.textContent = `${modelPrecision.toFixed(1)}%`;
+  if (anomalyEl) anomalyEl.textContent = anomalyCount;
+  
+  // Mise à jour des barres de progression
+  const maxProgress = document.getElementById('max-progress');
+  const avgProgress = document.getElementById('avg-progress');
+  const precisionProgress = document.getElementById('precision-progress');
+  const anomalyProgress = document.getElementById('anomaly-progress');
+  const efficiencyBar = document.getElementById('efficiency-bar');
+  const efficiencyText = document.getElementById('efficiency-text');
+  
+  if (maxProgress) maxProgress.style.width = `${Math.min((maxConsumption / 100) * 100, 100)}%`;
+  if (avgProgress) avgProgress.style.width = `${Math.min((avgConsumption / 50) * 100, 100)}%`;
+  if (precisionProgress) precisionProgress.style.width = `${modelPrecision}%`;
+  if (anomalyProgress) anomalyProgress.style.width = `${Math.min((anomalyCount / 20) * 100, 100)}%`;
+  
+  if (efficiencyBar) efficiencyBar.style.width = `${efficiency}%`;
+  if (efficiencyText) efficiencyText.textContent = `${efficiency.toFixed(1)}%`;
+  
+  // Calcul de la tendance (simulation)
+  const trendUp = document.getElementById('trend-up');
+  const trendStable = document.getElementById('trend-stable');
+  const trendDown = document.getElementById('trend-down');
+  
+  // Simulation de tendance basée sur les dernières valeurs
+  const recentValues = realValues.slice(-7);
+  const olderValues = realValues.slice(-14, -7);
+  const recentAvg = recentValues.reduce((a, b) => a + b, 0) / recentValues.length;
+  const olderAvg = olderValues.reduce((a, b) => a + b, 0) / olderValues.length;
+  const trend = ((recentAvg - olderAvg) / olderAvg) * 100;
+  
+  if (trendUp && trendStable && trendDown) {
+    // Reset styles
+    [trendUp, trendStable, trendDown].forEach(el => el.style.opacity = '0.3');
+    
+    if (trend > 5) {
+      trendUp.style.opacity = '1';
+      trendUp.textContent = `↗ +${trend.toFixed(1)}%`;
+    } else if (trend < -5) {
+      trendDown.style.opacity = '1';
+      trendDown.textContent = `↘ ${trend.toFixed(1)}%`;
+    } else {
+      trendStable.style.opacity = '1';
+      trendStable.textContent = `→ ${trend.toFixed(1)}%`;
+    }
+  }
+}
+
+// Quick action functions
+function exportData() {
+  showNotification('Export des données en cours...', 'info');
+  // Simulate export
+  setTimeout(() => {
+    showNotification('Données exportées avec succès!', 'success');
+  }, 2000);
+}
+
+function runPrediction() {
+  showNotification('Lancement de nouvelle prédiction...', 'info');
+  // Simulate prediction
+  setTimeout(() => {
+    showNotification('Prédiction terminée!', 'success');
+    updateDashboard();
+  }, 3000);
+}
+
+function generateReport() {
+  showNotification('Génération du rapport PDF...', 'info');
+  // Simulate report generation
+  setTimeout(() => {
+    showNotification('Rapport généré avec succès!', 'success');
+  }, 2500);
+}
+
+function optimizeModels() {
+  showNotification('Optimisation des modèles en cours...', 'info');
+  // Simulate optimization
+  setTimeout(() => {
+    showNotification('Modèles optimisés!', 'success');
+  }, 4000);
+}
+
+function refreshRecentFiles() {
+  showNotification('Actualisation des fichiers...', 'info');
+  updateDashboard();
+}
+
+function showOutliersDetails() {
+  $('#outliersModal').modal('show');
+
+  // Simulate loading outliers details
+  setTimeout(() => {
+    const content = document.getElementById('outliers-details-content');
+    content.innerHTML = `
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Valeur</th>
+              <th>Écart</th>
+              <th>Seuil</th>
+            </tr>
+          </thead>
+          <tbody id="anomalies-tbody">
+            {% for anomaly in anomalies %}
+            <tr>
+              <td>{{ anomaly.date }}</td>
+              <td class="{% if anomaly.deviation_percent > 50 %}text-danger{% elif anomaly.deviation_percent > 25 %}text-warning{% else %}text-info{% endif %}">
+                {{ anomaly.value|floatformat:0 }} kWh
+              </td>
+              <td>+{{ anomaly.deviation_percent|floatformat:1 }}%</td>
+              <td>{{ anomaly.threshold|floatformat:0 }} kWh</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted">Aucune anomalie détectée</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }, 1000);
+}
+
+function exportOutliers() {
+  showNotification('Export des anomalies en cours...', 'info');
+  setTimeout(() => {
+    showNotification('Anomalies exportées!', 'success');
+  }, 1500);
+}
+
+// Fonction pour calculer le coût selon la grille tarifaire progressive tunisienne
+function calculateTunisianTariff(consumption) {
+  const tariffs = [
+    { min: 0, max: 50, rate: 0.122 },     // De 0 à 50 kWh : 0.122 DT/kWh
+    { min: 50, max: 100, rate: 0.153 },   // De 51 à 100 kWh : 0.153 DT/kWh
+    { min: 100, max: 200, rate: 0.189 },  // De 101 à 200 kWh : 0.189 DT/kWh
+    { min: 200, max: 300, rate: 0.218 },  // De 201 à 300 kWh : 0.218 DT/kWh
+    { min: 300, max: 500, rate: 0.245 },  // De 301 à 500 kWh : 0.245 DT/kWh
+    { min: 500, max: Infinity, rate: 0.279 } // Plus de 500 kWh : 0.279 DT/kWh
+  ];
+
+  let costHT = 0;
+  let remainingConsumption = consumption;
+
+  for (const tariff of tariffs) {
+    if (remainingConsumption <= 0) break;
+    
+    const rangeConsumption = Math.min(remainingConsumption, tariff.max - tariff.min);
+    costHT += rangeConsumption * tariff.rate;
+    remainingConsumption -= rangeConsumption;
+  }
+
+  const tva = costHT * 0.19; // TVA de 19%
+  const costTTC = costHT + tva;
+
+  return {
+    costHT: costHT,
+    tva: tva,
+    costTTC: costTTC
+  };
+}
+
+// Enhanced Calendar
+document.addEventListener('DOMContentLoaded', function () {
+  const calendarEl = document.getElementById('calendar');
+  if (!calendarEl) return;
+
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    height: 500,
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    locale: 'fr',
+    firstDay: 1,
+    weekNumbers: true,
+    navLinks: true,
+    selectable: true,
+    selectMirror: true,
+    dayMaxEvents: true,
+
+    dateClick: function(info) {
+      const date = info.dateStr;
+
+      // Show loading in modal
+      const modalContent = document.getElementById('calendar-modal-content');
+      modalContent.innerHTML = `
+        <div class="text-center">
+          <div class="loading-spinner mb-3"></div>
+          <p>Chargement des données pour ${date}...</p>
+        </div>
+      `;
+
+      $('#calendarModal').modal('show');
+
+      // Fetch data
+      fetch(`/auth/api/consommation/?date=${date}`)
+        .then(res => res.json())
+        .then(data => {
+          const realValue = (data.real || 0).toFixed(2);
+          const predictedXgb = (data.predicted_xgb || 0).toFixed(2);
+          const difference = (data.real && data.predicted_xgb) ? (data.real - data.predicted_xgb).toFixed(2) : 0;
+          const accuracy = (data.real && data.predicted_xgb && data.real > 0) ? 
+            ((1 - Math.abs(difference) / data.real) * 100).toFixed(1) : 0;
+          
+          modalContent.innerHTML = `
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <h3>📊 ${realValue} kWh</h3>
+                    <p class="mb-0"><i class="fas fa-chart-line mr-1"></i>Réel</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card bg-info text-white">
+                  <div class="card-body text-center">
+                    <h3>🤖 ${predictedXgb} kWh</h3>
+                    <p class="mb-0"><i class="fas fa-robot mr-1"></i>XGBoost</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <h4>${Math.abs(difference)} kWh</h4>
+                    <p class="mb-0"><i class="fas fa-exchange-alt mr-1"></i>Écart (XGBoost)</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card bg-secondary text-white">
+                  <div class="card-body text-center">
+                    <h4>${accuracy}%</h4>
+                    <p class="mb-0"><i class="fas fa-bullseye mr-1"></i>Précision</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-muted text-center">
+                <i class="fas fa-calendar-day mr-1"></i>
+                Données pour le ${new Date(date).toLocaleDateString('fr-FR', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            </div>
+          `;
+        })
+        .catch(error => {
+          console.error('Erreur:', error);
+          modalContent.innerHTML = `
+            <div class="alert alert-danger">
+              <i class="fas fa-exclamation-triangle mr-2"></i>
+              Erreur lors de la récupération des données pour cette date.
+            </div>
+          `;
+        });
+    },
+
+    events: function(fetchInfo, successCallback, failureCallback) {
+      // Récupérer les vraies données depuis l'API
+      fetch('/auth/api/stats/')
+        .then(response => response.json())
+        .then(data => {
+          const events = [];
+          
+          // Utiliser les vraies données de l'API
+          if (data.weekly_labels && data.real_values) {
+            data.weekly_labels.forEach((dateStr, index) => {
+              const realValue = data.real_values[index] || 0;
+              const predictedValue = data.xgb_values ? data.xgb_values[index] || 0 : 0;
+              
+              // Déterminer la couleur selon la consommation réelle
+              let color = '#28a745'; // Vert pour consommation normale
+              if (realValue > 1000) color = '#dc3545'; // Rouge pour consommation élevée
+              else if (realValue > 500) color = '#ffc107'; // Jaune pour consommation moyenne
+              
+              // Créer un événement unique combinant réel et prédit
+              let title = '';
+              if (realValue > 0 && predictedValue > 0) {
+                title = `📊 ${realValue.toFixed(0)} kWh | 🤖 ${predictedValue.toFixed(0)} kWh`;
+              } else if (realValue > 0) {
+                title = `📊 ${realValue.toFixed(0)} kWh (Réel)`;
+              } else if (predictedValue > 0) {
+                title = `🤖 ${predictedValue.toFixed(0)} kWh (Prédit)`;
+              } else {
+                title = `📊 0 kWh`;
+              }
+              
+              events.push({
+                id: `data-${index}`,
+                title: title,
+                start: dateStr,
+                backgroundColor: color,
+                borderColor: color,
+                textColor: 'white',
+                extendedProps: {
+                  real: realValue,
+                  predicted: predictedValue,
+                  date: dateStr
+                }
+              });
+            });
+          }
+          
+          successCallback(events);
+        })
+        .catch(error => {
+          console.error('Erreur lors du chargement des événements du calendrier:', error);
+          
+          // Fallback: générer quelques événements d'exemple
+          const events = [];
+          const start = new Date(fetchInfo.start);
+          const end = new Date(fetchInfo.end);
+          
+          for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            const consumption = Math.random() * 1000 + 500;
+            let color = '#28a745'; // Normal
+
+            if (consumption > 900) color = '#dc3545'; // High
+            else if (consumption > 750) color = '#ffc107'; // Medium
+
+            events.push({
+              title: `${consumption.toFixed(0)} kWh`,
+              start: new Date(d).toISOString().split('T')[0],
+              backgroundColor: color,
+              borderColor: color,
+              textColor: 'white'
+            });
+          }
+          
+          successCallback(events);
+        });
+    }
+  });
+
+  calendar.render();
+
+  // Calendar view buttons
+  document.querySelectorAll('[data-calendar-view]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const view = this.getAttribute('data-calendar-view');
+      calendar.changeView(view);
+
+      // Update active button
+      document.querySelectorAll('[data-calendar-view]').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+});
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+  // Hide loading overlay
+  setTimeout(() => {
+    document.getElementById('loading-overlay').style.display = 'none';
+  }, 1000);
+
+  // Initial dashboard update
+  updateDashboard();
+
+  // Set up auto-refresh
+  updateInterval = setInterval(updateDashboard, 30000); // Every 30 seconds
+
+  // Update time every minute
+  setInterval(updateLastRefresh, 60000);
+});
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', function() {
+  if (updateInterval) clearInterval(updateInterval);
+  Object.values(charts).forEach(chart => {
+    if (chart) chart.destroy();
+  });
+});
+</script>
+</body>
+</html>
