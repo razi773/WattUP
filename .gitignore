@@ -1,0 +1,8 @@
+# Exclure l'environnement virtuel
+venv/
+
+# Exclure le dossier du modèle LLaMA
+llama3_cleaned/
+
+# Exclure l'archive
+deploiement-project.zip
