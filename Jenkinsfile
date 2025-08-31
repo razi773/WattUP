@@ -8,7 +8,7 @@ pipeline {
         NEXUS_CREDS = credentials('razi') // ton ID Nexus
         IMAGE_NAME = 'deploiement-project-django-app'
         IMAGE_TAG  = "${env.BUILD_NUMBER}"
-        REGISTRY_URL = 'localhost:8081'   // e.g. nexus.example.com:8083
+        REGISTRY_URL = 'localhost:8081'   // Assure-toi que c’est le port du repo Docker, pas l’UI
     }
 
     stages {
