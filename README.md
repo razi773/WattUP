@@ -35,6 +35,7 @@ It is deployed as a **backend-first architecture** that integrates:
 - **Other Tools**: Postman, Jupyter Notebooks, Twilio (SMS alerts)  
 
 ## Directory Structure
+
 root/
 │
 ├── AI_Energy_Analyzer/ # Core analysis logic
@@ -67,6 +68,8 @@ root/
 ├── EMAIL_FIXES.md # Email system fixes
 ├── EMAIL_SOLUTION.md # Email system documentation
 └── README.md
+
+
 
 ## Acknowledgments
 
