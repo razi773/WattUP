@@ -37,15 +37,35 @@ It is deployed as a **backend-first architecture** that integrates:
 ## Directory Structure
 root/
 │
-├── backend/ # Core API & IoT data pipeline
-│ ├── anomaly_detection/ # ML models for anomaly detection
-│ ├── prediction/ # Consumption & cost forecasting
-│ ├── defect_detection/ # Image defect analysis
-│ └── ...
+├── AI_Energy_Analyzer/ # Core analysis logic
+├── ai_energy/ # Main backend package
+├── data/ # Sample data & CSV uploads
+├── embeddings/faiss_index/ # Vector DB for similarity search
+├── face_auth/ # Face authentication module
+├── ingestion/ # Data ingestion & cleaning
+├── logs/ # System logs
+├── ml_models/ # Trained ML models
+├── static/ # Static assets (CSS, JS, images)
+├── templates/ # HTML templates for dashboard
+├── uploads/ # User-uploaded files
 │
-├── dashboard/ # Frontend web interface
-├── database/ # Schemas & SQL scripts
-├── docker-compose.yml # Runs backend + dashboard + DB services
+├── Dockerfile # Docker image definition
+├── docker-compose.yml # Multi-service orchestration
+├── Jenkinsfile # CI/CD pipeline
+├── requirements.txt # Python dependencies
+├── manage.py # Management script
+├── db.sqlite3 # Local development DB
+│
+├── build_vector_db.py # Vector DB builder
+├── clean_bom.py # Data cleaning utilities
+├── clear_lstm_predictions.py# Reset predictions
+├── fix_dashboard.py # Dashboard bug fixes
+├── gmail_setup_guide.py # Gmail alert setup
+├── test_gmail.py # Email service test
+├── test_llm.py # LLM service test
+│
+├── EMAIL_FIXES.md # Email system fixes
+├── EMAIL_SOLUTION.md # Email system documentation
 └── README.md
 
 ## Acknowledgments
